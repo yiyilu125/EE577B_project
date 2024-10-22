@@ -1,24 +1,21 @@
-module input_ctrl(sendI, dataI, clk, rst, polarity, sig_channel_clean, //router_data
-                  receiveI, inner_dataO, sig_req_channel);
-
-    parameter REQ_CHANNEL_WIDTH = 1; //may need more bits for eaiser loacation the output channel
+module input_ctrl #(
     parameter BUFFER_DATA_WIDTH = 64;
     parameter BUFFER_DEPTH = 1;
-
+)(
+    input sendI, //a signal indicates the data is sent from other node, need to catch it at this clock edge
+    input [63:0] dataI, 
+    input clk, 
+    input rst, 
+    input polarity, 
+    input sig_channel_clean, //a router internal input signal tells if the target output buffer can be access
+    output reg receiveI,    //a signal indicates has a free channel and ready to receive data
+    output [63:0] inner_dataO, 
+    output sig_req_channel //a router internal output signal send to the output channel to see if there is a available channel                
+);
     //state
     parameter IDLE = 3'b001,
               ODD_POLARITY = 3'b010,
               EVEN_POLARITY = 3'b100;
-
-    input sendI; //a signal indicates the data is sent from other node, need to catch it at this clock edge
-    input clk, rst;
-    input polarity;
-    input sig_channel_clean; //a router internal input signal tells if the target output buffer can be access
-    input [63:0] dataI;
-    output reg receiveI; //a signal indicates has a free channel and ready to receive data
-    //output sig_send_data; //a router internal output signal assert along with the data send out to the output channel
-    output [63:0] inner_dataO;
-    output [REQ_CHANNEL_WIDTH-1:0] sig_req_channel; //a router internal output signal send to the output channel to see if there is a available channel
 
     //virtual channel buffer
     //virtual buffer wire
