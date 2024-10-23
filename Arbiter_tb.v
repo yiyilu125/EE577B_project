@@ -2,62 +2,84 @@
 
 module tb_round_robin_arbiter;
 
-   
-    reg clk;
-    reg rst_n;
-    reg [3:0] req0;
-    reg [3:0] req1;
-    reg [3:0] req2;
-    reg [3:0] req3;
+    // Input signals
+	 reg clk;
+    reg rst;
+    reg [4:0] req0;
+    reg [4:0] req1;
+    reg [4:0] req2;
+    reg [4:0] req3;
+	reg empty;
 
-   
-    wire [3:0] grant;
+    // Output signal
+    wire [4:0] grant;
 
-  
+    // Instantiate the Device Under Test (DUT)
     round_robin_arbiter uut (
-        .clk(clk),
-        .rst_n(rst_n),
+		.clk(clk),
+        .rst(rst),
+		.empty(empty),
         .req0(req0),
         .req1(req1),
         .req2(req2),
         .req3(req3),
         .grant(grant)
     );
-
-   
-    always #5 clk = ~clk; 
-
+	 always #5 clk = ~clk; 
+    // Initial signal setup and test sequences
     initial begin
+        // Initialize all signals
+		clk=0;
+        rst = 1;    // Reset signal is active low
+        req0 = 5'b00000;
+        req1 = 5'b00000;
+        req2 = 5'b00000;
+        req3 = 5'b00000;
+        #10 
+		rst = 0;    
+
       
-        clk = 0;
-        rst_n = 1; 
-
-       
-        #10
-		rst_n = 0;
-       
-         req0 = 4'b0001; 
-         req1 = 4'b0010; 
-         req2 = 4'b0100;
-         req3 = 4'b1000; 
-		#50
-        
-         req0 = 4'b0000;  
-         req1 = 4'b0010; 
-         req2 = 4'b0000;  
-         req3 = 4'b1000; 
-		 
-		 #50
-		  req0 = 4'b0001;  
-         req1 = 4'b0010; 
-         req2 = 4'b0000;  
-         req3 = 4'b1000; 
-		 
-
-        // 
-        #100;
+        #10 
+		empty=1;
+		req0 = 5'b00001;    // req0 sends a request
+        req1 = 5'b00010;    // req1 sends a request
+        req2 = 5'b00100;    // req2 sends a request
+		req3 = 5'b01000; 
+		#10;
+		req0 = 5'b00000;
+        req1 = 5'b00000;
+        req2 = 5'b00000;
+        req3 = 5'b00000;
+		
+		#10
+		rst = 1;   
+		#10
+		rst = 0; 
+		
+	
+		
+		#10
+		req1 = 5'b00010;   
+        req2 = 5'b00100;    		
+	
+		#10
+		
+		//req2 =5'b00100;  
+		req3=5'b01000;
+		
+		
+		#10
+		req0 = 5'b00001;    // req0 sends a request
+		#10;
+		
+		
+		empty=0;
+		
+		
+		
+   
     end
 
+  
 
 endmodule
-
