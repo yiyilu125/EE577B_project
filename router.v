@@ -1,4 +1,8 @@
-module router(
+module router #(
+    parameter DATA_WIDTH = 64,  // Width of the data
+    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000; //current address in the mesh
+    parameter BUFFER_DEPTH = 1;
+)(
     input clk,
     input reset,
     output reg polarity,
@@ -101,100 +105,130 @@ module router(
     end
 
     // Input Interface
-    input_interface Input_W (
+    input_interface Input_W #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(CURRENT_ADDRESS),
+        .DIRECTION(5'b10000),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    )(
         .clk(clk),
         .rst(reset),
         .si(wesi),
         .datai(wedi),
         .ri(weri),
-        .sig_buffer_clear(clear_we),
+        // .sig_buffer_clear(clear_we),
+        .buf_clear_1(),
+        .buf_clear_2(),
+        .buf_clear_3(),
+        .buf_clear_4(),
         .reqL(), 
         .reqR(send_req_we), 
-        .reqU(), 
-        .reqD(), 
-        .reqPE(), 
+        .reqU(send_req_ws), 
+        .reqD(send_req_wn), 
+        .reqPE(send_req_wp), 
         .dataoL(), 
         .dataoR(data_in_we), 
-        .dataoU(), 
-        .dataoD(), 
-        .dataoPE()
+        .dataoU(data_in_ws), 
+        .dataoD(data_in_wn), 
+        .dataoPE(data_in_wp)
     );
 
-    input_interface Input_E (
+    input_interface Input_E #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(CURRENT_ADDRESS),
+        .DIRECTION(5'b01000),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    )(
         .clk(clk),
         .rst(reset),
         .si(ewsi),
         .datai(ewdi),
         .ri(ewri),
         .sig_buffer_clear(clear_ew),
-        .reqL(), 
-        .reqR(send_req_ew), 
-        .reqU(), 
-        .reqD(), 
-        .reqPE(), 
-        .dataoL(), 
-        .dataoR(data_in_ew), 
-        .dataoU(), 
-        .dataoD(), 
-        .dataoPE()
+        .reqL(send_req_ew), 
+        .reqR(), 
+        .reqU(send_req_en), 
+        .reqD(send_req_es), 
+        .reqPE(send_req_ep), 
+        .dataoL(data_in_ew), 
+        .dataoR(), 
+        .dataoU(data_in_en), 
+        .dataoD(data_in_es), 
+        .dataoPE(data_in_ep)
     );
 
-    input_interface Input_N (
+    input_interface Input_N #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(CURRENT_ADDRESS),
+        .DIRECTION(5'b00100),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    )(
         .clk(clk),
         .rst(reset),
         .si(nssi),
         .datai(nsdi),
         .ri(nsri),
         .sig_buffer_clear(clear_n),
-        .reqL(), 
-        .reqR(send_req_n), 
+        .reqL(send_req_nw), 
+        .reqR(send_req_ne), 
         .reqU(), 
-        .reqD(), 
-        .reqPE(), 
-        .dataoL(), 
-        .dataoR(data_in_n), 
+        .reqD(send_req_ns), 
+        .reqPE(send_req_np), 
+        .dataoL(data_in_nw), 
+        .dataoR(data_in_ne), 
         .dataoU(), 
-        .dataoD(), 
-        .dataoPE()
+        .dataoD(data_in_ns), 
+        .dataoPE(data_in_np)
     );
 
-    input_interface Input_S (
+    input_interface Input_S #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(CURRENT_ADDRESS),
+        .DIRECTION(5'b00010),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    )(
         .clk(clk),
         .rst(reset),
         .si(snsi),
         .datai(sndi),
         .ri(snri),
         .sig_buffer_clear(clear_s),
-        .reqL(), 
-        .reqR(send_req_s), 
-        .reqU(), 
+        .reqL(send_req_sw), 
+        .reqR(send_req_se), 
+        .reqU(send_req_sn), 
         .reqD(), 
-        .reqPE(), 
-        .dataoL(), 
-        .dataoR(data_in_s), 
-        .dataoU(), 
+        .reqPE(send_req_sp), 
+        .dataoL(data_in_sw), 
+        .dataoR(data_in_se), 
+        .dataoU(data_in_sn), 
         .dataoD(), 
-        .dataoPE()
+        .dataoPE(data_in_sp)
     );
 
-    input_interface Input_PE (
+    input_interface Input_PE #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(CURRENT_ADDRESS),
+        .DIRECTION(5'b00001),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    )(
         .clk(clk),
         .rst(reset),
         .si(pesi),
         .datai(pedi),
         .ri(peri),
         .sig_buffer_clear(clear_pe),
-        .reqL(), 
+        .reqL(send_req_pw), 
         .reqR(send_req_pe), 
-        .reqU(), 
-        .reqD(), 
+        .reqU(send_req_pn), 
+        .reqD(send_req_ps), 
         .reqPE(), 
-        .dataoL(), 
+        .dataoL(data_in_pw), 
         .dataoR(data_in_pe), 
-        .dataoU(), 
-        .dataoD(), 
+        .dataoU(data_in_pn), 
+        .dataoD(data_in_ps), 
         .dataoPE()
     );
+
 
 
     // Arbiter
@@ -202,10 +236,10 @@ module router(
         .clk(clk),
         .rst(reset),
         .empty(empty_e),
-        .req0(send_req_e),
-        .req1(),
-        .req2(),
-        .req3(),
+        .req0(send_req_pe),
+        .req1(send_req_we),
+        .req2(send_req_se),
+        .req3(send_req_ne),
         .grant(grant_e)
     );
 
@@ -213,10 +247,10 @@ module router(
         .clk(clk),
         .rst(reset),
         .empty(empty_w),
-        .req0(send_req_w),
-        .req1(),
-        .req2(),
-        .req3(),
+        .req0(send_req_pw),
+        .req1(send_req_ew),
+        .req2(send_req_sw),
+        .req3(send_req_nw),
         .grant(grant_w)
     );
 
@@ -224,10 +258,10 @@ module router(
         .clk(clk),
         .rst(reset),
         .empty(empty_n),
-        .req0(send_req_n),
-        .req1(),
-        .req2(),
-        .req3(),
+        .req0(send_req_pn),
+        .req1(send_req_wn),
+        .req2(send_req_en),
+        .req3(send_req_sn),
         .grant(grant_n)
     );
 
@@ -235,10 +269,10 @@ module router(
         .clk(clk),
         .rst(reset),
         .empty(empty_s),
-        .req0(send_req_s),
-        .req1(),
-        .req2(),
-        .req3(),
+        .req0(send_req_ps),
+        .req1(send_req_ws),
+        .req2(send_req_es),
+        .req3(send_req_ns),
         .grant(grant_s)
     );
 
@@ -246,10 +280,10 @@ module router(
         .clk(clk),
         .rst(reset),
         .empty(empty_pe),
-        .req0(send_req_pe),
-        .req1(),
-        .req2(),
-        .req3(),
+        .req0(send_req_wp),
+        .req1(send_req_ep),
+        .req2(send_req_sp),
+        .req3(send_req_np),
         .grant(grant_pe)
     );
 
