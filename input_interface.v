@@ -10,7 +10,7 @@ module input_interface #(
     input sig_buffer_clear,
     input [63:0] datai,
     output [4:0] reqL, reqR, reqU, reqD, reqPE,
-    output [63:0] dataoL, dataR, dataoU, dataoD, dataoPE
+    output [63:0] dataoL, dataoR, dataoU, dataoD, dataoPE
 );
     wire req_sign_channel;
     wire [DATA_WIDTH-1:0] dataout_channel;
