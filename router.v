@@ -45,12 +45,51 @@ module router(
 );
 
     // Internal variable
+    wire send_req_wn;
+    wire send_req_nw;
+    wire send_req_ws;
+    wire send_req_sw;
     wire send_req_we;
-    wire clear_w;
-    wire data_in_w;
-    wire empty_e;
-    wire grant_e;
+    wire send_req_ew;
+    wire send_req_wp;
+    wire send_req_pw;
+    wire send_req_ns;
+    wire send_req_sn;
+    wire send_req_ne;
+    wire send_req_en;
+    wire send_req_np;
+    wire send_req_pn;
+    wire send_req_sp;
+    wire send_req_ps;
+    wire send_req_se;
+    wire send_req_es;
+    wire send_req_ep;
+    wire send_req_pe;
 
+    wire data_in_wn;
+    wire data_in_nw;
+    wire data_in_ws;
+    wire data_in_sw;
+    wire data_in_we;
+    wire data_in_ew;
+    wire data_in_wp;
+    wire data_in_pw;
+    wire data_in_ns;
+    wire data_in_sn;
+    wire data_in_ne;
+    wire data_in_en;
+    wire data_in_np;
+    wire data_in_pn;
+    wire data_in_sp;
+    wire data_in_ps;
+    wire data_in_se;
+    wire data_in_es;
+    wire data_in_ep;
+    wire data_in_pe;
+
+    wire clear_e, clear_w, clear_n, clear_s, clear_pe;
+    wire empty_e, empty_w, empty_n, empty_s, empty_pe;
+    wire grant_e, grant_w, grant_n, grant_s, grant_pe;
 
     // Polarity generation
     always @(posedge clk) begin
@@ -215,6 +254,27 @@ module router(
     );
 
 
+    // Output Control
+    opctrl Output_E (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+        .grant(grant_E),
+        .data_in_pe(),
+        .data_in_s(),
+        .data_in_n(),
+        .data_in_e(),
+        .data_in_w(data_in_w),
+        .receive_output(wero),
+        .data_out(wedo),
+        .empty(empty_E),
+        .send_output(weso),
+        .clear_pe(),
+        .clear_s(),
+        .clear_n(),
+        .clear_e(),
+        .clear_w(clear_w)
+    );
 
     opctrl Output_E (
         .clk(clk),
@@ -235,13 +295,71 @@ module router(
         .clear_n(),
         .clear_e(),
         .clear_w(clear_w)
-    )
+    );
 
+    opctrl Output_E (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+        .grant(grant_E),
+        .data_in_pe(),
+        .data_in_s(),
+        .data_in_n(),
+        .data_in_e(),
+        .data_in_w(data_in_w),
+        .receive_output(wero),
+        .data_out(wedo),
+        .empty(empty_E),
+        .send_output(weso),
+        .clear_pe(),
+        .clear_s(),
+        .clear_n(),
+        .clear_e(),
+        .clear_w(clear_w)
+    );
 
+    opctrl Output_E (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+        .grant(grant_E),
+        .data_in_pe(),
+        .data_in_s(),
+        .data_in_n(),
+        .data_in_e(),
+        .data_in_w(data_in_w),
+        .receive_output(wero),
+        .data_out(wedo),
+        .empty(empty_E),
+        .send_output(weso),
+        .clear_pe(),
+        .clear_s(),
+        .clear_n(),
+        .clear_e(),
+        .clear_w(clear_w)
+    );
 
+    opctrl Output_E (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+        .grant(grant_E),
+        .data_in_pe(),
+        .data_in_s(),
+        .data_in_n(),
+        .data_in_e(),
+        .data_in_w(data_in_w),
+        .receive_output(wero),
+        .data_out(wedo),
+        .empty(empty_E),
+        .send_output(weso),
+        .clear_pe(),
+        .clear_s(),
+        .clear_n(),
+        .clear_e(),
+        .clear_w(clear_w)
+    );
 
-
-
-
+    
 
 endmodule
