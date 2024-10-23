@@ -7,13 +7,15 @@ module input_interface #(
     input si,
     input ri,
     input clk, rst,
-    input sig_buffer_clear,
+    input buf_clear_1, buf_clear_2, buf_clear_3, buf_clear_4;
     input [63:0] datai,
     output [4:0] reqL, reqR, reqU, reqD, reqPE,
     output [63:0] dataoL, dataoR, dataoU, dataoD, dataoPE
 );
     wire req_sign_channel;
     wire [DATA_WIDTH-1:0] dataout_channel;
+
+    assign sig_buffer_clear = buf_clear_1 | buf_clear_2 | buf_clear_3 | buf_clear_4;
 
     input_ctrl input_ctrl_uut #(.DATA_WIDTH(DATA_WIDTH), .BUFFER_DATA_WIDTH(DATA_WIDTH), .BUFFER_DEPTH(BUFFER_DEPTH))(
         .sendI(si),
