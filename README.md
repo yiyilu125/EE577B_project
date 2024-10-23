@@ -1,6 +1,16 @@
 # EE577b Project - Mesh
 
 ## ROUTER
+### One-hot 
+W: 10000
+
+E: 01000
+
+N: 00100
+
+S: 00010
+
+PE: 00001
 
 ### Input Control
 ```verilog
