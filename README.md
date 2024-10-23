@@ -1,7 +1,5 @@
 # EE577b Project - Mesh
 
-***
-
 ## ROUTER
 
 ### Direction One-hot Coding
@@ -66,7 +64,7 @@ module opctrl (
 );
 ```
 
-***
+
 ## Network Interface Component (NIC)
 ```verilog
 module nic(
