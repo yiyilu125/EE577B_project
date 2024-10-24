@@ -24,10 +24,18 @@ module tb_routerx4();
     wire polarity;
 
     // Wires for inter-router connections
+    //r1 & r2
     wire weso_r1_r2, wero_r1_r2;
+    wire weso_r2_r1, wero_r2_r1;
+    //r3 & r4
     wire weso_r3_r4, wero_r3_r4;
+    wire weso_r4_r3, wero_r4_r3;
+    //r1 & r3
     wire weso_r1_r3, wero_r1_r3;
+    wire weso_r3_r1, wero_r3_r1;
+    //r2 & r4
     wire weso_r2_r4, wero_r2_r4;
+    wire weso_r4_r2, wero_r4_r2;
 
     wire [63:0] wedo_r1_r2, wedo_r2_r1;
     wire [63:0] wedo_r3_r4, wedo_r4_r3;
@@ -57,20 +65,20 @@ module tb_routerx4();
         .polarity(polarity),
 
         // West to East interface (connects to r2)
-        .wesi(weso_r2_r1),
-        .wedi(wedo_r2_r1),
-        .weri(wero_r2_r1),
-        .weso(weso_r1_r2),
-        .wero(wero_r1_r2),
-        .wedo(wedo_r1_r2),
+        .wesi(),
+        .wedi(),
+        .weri(),
+        .weso(),
+        .wero(),
+        .wedo(),
 
         // East to West interface (no connection to the left)
-        .ewsi(1'b0),
-        .ewdi(64'b0),
-        .ewri(),
-        .ewso(),
-        .ewro(),
-        .ewdo(),
+        .ewsi(weso_r2_r1),
+        .ewdi(wedo_r2_r1),
+        .ewri(wero_r2_r1),
+        .ewso(weso_r1_r2),
+        .ewro(wero_r1_r2),
+        .ewdo(wedo_r1_r2),
 
         // North to South interface (connects to r3)
         .nssi(weso_r3_r1),
@@ -81,8 +89,8 @@ module tb_routerx4();
         .nsdo(wedo_r1_r3),
 
         // South to North interface (no connection below)
-        .snsi(1'b0),
-        .sndi(64'b0),
+        .snsi(),
+        .sndi(),
         .snri(),
         .snso(),
         .snro(),
@@ -93,7 +101,7 @@ module tb_routerx4();
         .pedi(pedi_r1),
         .peri(peri_r1),
         .peso(peso_r1),
-        .pero(1'b0),
+        .pero(1'b1),
         .pedo(pedo_r1)
     );
 
@@ -116,8 +124,8 @@ module tb_routerx4();
         .wedo(wedo_r2_r1),
 
         // East to West interface (no connection to the right)
-        .ewsi(1'b0),
-        .ewdi(64'b0),
+        .ewsi(),
+        .ewdi(),
         .ewri(),
         .ewso(),
         .ewro(),
@@ -132,8 +140,8 @@ module tb_routerx4();
         .nsdo(wedo_r2_r4),
 
         // South to North interface (no connection below)
-        .snsi(1'b0),
-        .sndi(64'b0),
+        .snsi(),
+        .sndi(),
         .snri(),
         .snso(),
         .snro(),
@@ -144,7 +152,7 @@ module tb_routerx4();
         .pedi(pedi_r2),
         .peri(peri_r2),
         .peso(peso_r2),
-        .pero(1'b0),
+        .pero(1'b1),
         .pedo(pedo_r2)
     );
 
@@ -159,24 +167,24 @@ module tb_routerx4();
         .polarity(polarity),
 
         // West to East interface (connects to r4)
-        .wesi(weso_r4_r3),
-        .wedi(wedo_r4_r3),
-        .weri(wero_r4_r3),
-        .weso(weso_r3_r4),
-        .wero(wero_r3_r4),
-        .wedo(wedo_r3_r4),
+        .wesi(),
+        .wedi(),
+        .weri(),
+        .weso(),
+        .wero(),
+        .wedo(),
 
         // East to West interface (no connection to the left)
-        .ewsi(1'b0),
-        .ewdi(64'b0),
-        .ewri(),
-        .ewso(),
-        .ewro(),
-        .ewdo(),
+        .ewsi(weso_r4_r3),
+        .ewdi(wedo_r4_r3),
+        .ewri(wero_r4_r3),
+        .ewso(weso_r3_r4),
+        .ewro(wero_r3_r4),
+        .ewdo(wedo_r3_r4),
 
         // North to South interface (no connection above)
-        .nssi(1'b0),
-        .nsdi(64'b0),
+        .nssi(),
+        .nsdi(),
         .nsri(),
         .nsso(),
         .nsro(),
@@ -195,7 +203,7 @@ module tb_routerx4();
         .pedi(pedi_r3),
         .peri(peri_r3),
         .peso(peso_r3),
-        .pero(1'b0),
+        .pero(1'b1),
         .pedo(pedo_r3)
     );
 
@@ -218,16 +226,16 @@ module tb_routerx4();
         .wedo(wedo_r4_r3),
 
         // East to West interface (no connection to the right)
-        .ewsi(1'b0),
-        .ewdi(64'b0),
+        .ewsi(),
+        .ewdi(),
         .ewri(),
         .ewso(),
         .ewro(),
         .ewdo(),
 
         // North to South interface (no connection above)
-        .nssi(1'b0),
-        .nsdi(64'b0),
+        .nssi(),
+        .nsdi(),
         .nsri(),
         .nsso(),
         .nsro(),
@@ -246,7 +254,7 @@ module tb_routerx4();
         .pedi(pedi_r4),
         .peri(peri_r4),
         .peso(peso_r4),
-        .pero(1'b0),
+        .pero(1'b1),
         .pedo(pedo_r4)
     );
 
@@ -349,6 +357,19 @@ module tb_routerx4();
     end
 
     // Monitor signal changes
+    // Monitor task
+    task monitor_signals;
+        begin
+            // Display important signals at every clock cycle
+            $display("Time: %0t | clk: %0b | pesi: %0b | peri: %0b | pedi: %h | peso: %0b | pedo: %h",
+                    $time, clk, pesi, peri, pedi, peso, pedo);
+        end
+    endtask
+
+    // Continuous monitoring on every clock cycle
+    always @(posedge clk or negedge clk) begin
+        monitor_signals;
+    end
     
 
 endmodule
