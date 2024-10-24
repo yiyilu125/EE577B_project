@@ -281,24 +281,45 @@ module tb_routerx4();
         #10;
         pesi_r1 = 0; // Stop sending after 10 time units
 
-        // Wait for a few cycles for data to propagate
-        // #20;
+        //Wait for a few cycles for data to propagate
+        #20;
 
-        // // Test 2: r2 sends data to r1, r3, r4
-        // pesi_r2 = 1;
-        // pedi_r2 = {1'b1, 2'b11, 5'b00000, 8'b0000_0000, 16'h0000,32'h11223344};
-        // #10;
-        // pesi_r2 = 0;
+        // Test 2: r2 sends data to r1, r3, r4
+        pesi_r2 = 1;
+        pedi_r2 = {1'b1, 2'b00, 5'b00000, 8'b0001_0000, 16'h0000,32'h4444_4444};
+        #10;
+        pesi_r2 = 0;
+        #20
+        pesi_r2 = 1;
+        pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0001_0001, 16'h0000,32'h5555_5555};
+        #10;
+        pesi_r2 = 0;
+        #20
+        pesi_r2 = 1;
+        pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0000_0001, 16'h0000,32'h6666_6666};
+        #10;
+        pesi_r2 = 0;
 
-        // #20;
+        #20;
 
         // // Test 3: r3 sends data to r1, r2, r4
-        // pesi_r3 = 1;
-        // pedi_r3 = 64'h1122334455667788;
-        // #10;
-        // pesi_r3 = 0;
+        pesi_r3 = 1;
+        pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0000_0001, 16'h0000,32'h7777_7777};
+        #10;
+        pesi_r3 = 0;
+        #20
+        pesi_r3 = 1;
+        pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0001_0001, 16'h0000,32'h8888_8888};
+        #10;
+        pesi_r3 = 0;
+        #20
+        pesi_r3 = 1;
+        pedi_r3 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h9999_9999};
+        #10;
+        pesi_r3 = 0;
+        #20
 
-        // #20;
+        #20;
 
         // // Test 4: r4 sends data to r1, r2, r3
         // pesi_r4 = 1;
