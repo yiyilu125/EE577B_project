@@ -49,15 +49,15 @@ module router #(
 );
 
     // Internal variable
-    wire send_req_wn, send_req_nw, send_req_ws, send_req_sw, send_req_we;
-    wire send_req_ew, send_req_wp, send_req_pw, send_req_ns, send_req_sn;
-    wire send_req_ne, send_req_en, send_req_np, send_req_pn, send_req_sp;
-    wire send_req_ps, send_req_se, send_req_es, send_req_ep, send_req_pe;
+    wire [4:0] send_req_wn, send_req_nw, send_req_ws, send_req_sw, send_req_we;
+    wire [4:0] send_req_ew, send_req_wp, send_req_pw, send_req_ns, send_req_sn;
+    wire [4:0] send_req_ne, send_req_en, send_req_np, send_req_pn, send_req_sp;
+    wire [4:0] send_req_ps, send_req_se, send_req_es, send_req_ep, send_req_pe;
 
-    wire data_in_wn, data_in_nw, data_in_ws, data_in_sw, data_in_we;
-    wire data_in_ew, data_in_wp, data_in_pw, data_in_ns, data_in_sn;
-    wire data_in_ne, data_in_en, data_in_np, data_in_pn, data_in_sp;
-    wire data_in_ps, data_in_se, data_in_es, data_in_ep, data_in_pe;
+    wire [63:0] data_in_wn, data_in_nw, data_in_ws, data_in_sw, data_in_we;
+    wire [63:0] data_in_ew, data_in_wp, data_in_pw, data_in_ns, data_in_sn;
+    wire [63:0] data_in_ne, data_in_en, data_in_np, data_in_pn, data_in_sp;
+    wire [63:0] data_in_ps, data_in_se, data_in_es, data_in_ep, data_in_pe;
 
     wire clear_wn, clear_nw, clear_ws, clear_sw, clear_we;
     wire clear_ew, clear_wp, clear_pw, clear_ns, clear_sn;
@@ -65,7 +65,7 @@ module router #(
     wire clear_ps, clear_se, clear_es, clear_ep, clear_pe;
 
     wire empty_e, empty_w, empty_n, empty_s, empty_pe;
-    wire grant_e, grant_w, grant_n, grant_s, grant_pe;
+    wire [4:0] grant_e, grant_w, grant_n, grant_s, grant_pe;
 
 
     // Polarity generation
@@ -118,7 +118,7 @@ module router #(
         .ri(ewri),
         .buf_clear_1(clear_we),
         .buf_clear_2(clear_ne),
-        .buf_clear_3(clear_es),
+        .buf_clear_3(clear_se),
         .buf_clear_4(clear_pe),
         .reqL(send_req_ew), 
         .reqR(), 
@@ -146,7 +146,7 @@ module router #(
         .buf_clear_1(clear_en),
         .buf_clear_2(clear_wn),
         .buf_clear_3(clear_sn),
-        .buf_clear_4(clear_np),
+        .buf_clear_4(clear_pn),
         .reqL(send_req_nw), 
         .reqR(send_req_ne), 
         .reqU(), 
