@@ -47,7 +47,11 @@ module tb_routerx4();
     // Instantiate the router modules with the connections
 
     // Router 1 (bottom-left, connects to r2 on the right, r3 above)
-    router r1 (
+    router r1 #(
+        .DATA_WIDTH(64),
+        .CURRENT_ADDRESS(16'b0000_0000_0000_0000); //current address in the mesh
+        .BUFFER_DEPTH(1);
+    )(
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -94,7 +98,11 @@ module tb_routerx4();
     );
 
     // Router 2 (bottom-right, connects to r1 on the left, r4 above)
-    router r2 (
+    router r2 #(
+        .DATA_WIDTH(64),
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0000); //current address in the mesh
+        .BUFFER_DEPTH(1);
+    )(
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -141,7 +149,11 @@ module tb_routerx4();
     );
 
     // Router 3 (top-left, connects to r4 on the right, r1 below)
-    router r3 (
+    router r3 #(
+        .DATA_WIDTH(64),
+        .CURRENT_ADDRESS(16'b0000_0000_0000_0001); //current address in the mesh
+        .BUFFER_DEPTH(1);
+    )(
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -188,7 +200,11 @@ module tb_routerx4();
     );
 
     // Router 4 (top-right, connects to r3 on the left, r2 below)
-    router r4 (
+    router r4 #(
+        .DATA_WIDTH(64),
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0001); //current address in the mesh
+        .BUFFER_DEPTH(1);
+    )(
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -251,54 +267,74 @@ module tb_routerx4();
 
         // Test 1: r1 sends data to r2, r3, r4
         pesi_r1 = 1;
-        pedi_r1 = 64'hAABBCCDD11223344; // Example data
+        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h1111_1111}; // {vc, dir, NA, hop, source_address, data}
+        #10;
+        pesi_r1 = 0; // Stop sending after 10 time units
+        #20
+        pesi_r1 = 1;
+        pedi_r1 = {1'b1, 2'b01, 5'b00000, 8'b0000_0001, 16'h0000,32'h2222_2222}; 
+        #10;
+        pesi_r1 = 0; // Stop sending after 10 time units
+        #20
+        pesi_r1 = 1;
+        pedi_r1 = {1'b1, 2'b11, 5'b00000, 8'b0001_0001, 16'h0000,32'h3333_3333}; 
         #10;
         pesi_r1 = 0; // Stop sending after 10 time units
 
         // Wait for a few cycles for data to propagate
-        #20;
+        // #20;
 
-        // Test 2: r2 sends data to r1, r3, r4
-        pesi_r2 = 1;
-        pedi_r2 = 64'h5566778899AABBCC;
-        #10;
-        pesi_r2 = 0;
+        // // Test 2: r2 sends data to r1, r3, r4
+        // pesi_r2 = 1;
+        // pedi_r2 = {1'b1, 2'b11, 5'b00000, 8'b0000_0000, 16'h0000,32'h11223344};
+        // #10;
+        // pesi_r2 = 0;
 
-        #20;
+        // #20;
 
-        // Test 3: r3 sends data to r1, r2, r4
-        pesi_r3 = 1;
-        pedi_r3 = 64'h1122334455667788;
-        #10;
-        pesi_r3 = 0;
+        // // Test 3: r3 sends data to r1, r2, r4
+        // pesi_r3 = 1;
+        // pedi_r3 = 64'h1122334455667788;
+        // #10;
+        // pesi_r3 = 0;
 
-        #20;
+        // #20;
 
-        // Test 4: r4 sends data to r1, r2, r3
-        pesi_r4 = 1;
-        pedi_r4 = 64'h99AABBCCDDEEFF00;
-        #10;
-        pesi_r4 = 0;
+        // // Test 4: r4 sends data to r1, r2, r3
+        // pesi_r4 = 1;
+        // pedi_r4 = 64'h99AABBCCDDEEFF00;
+        // #10;
+        // pesi_r4 = 0;
 
-        #20;
+        // #20;
 
-        // Test 5: r1, r2, and r3 send to r4
-        pesi_r1 = 1;
-        pedi_r1 = 64'h0011223344556677;
-        pesi_r2 = 1;
-        pedi_r2 = 64'h8899AABBCCDDEEFF;
-        pesi_r3 = 1;
-        pedi_r3 = 64'hFFEEDDCCBBAA9988;
-        #10;
-        pesi_r1 = 0;
-        pesi_r2 = 0;
-        pesi_r3 = 0;
+        // // Test 5: r1, r2, and r3 send to r4
+        // pesi_r1 = 1;
+        // pedi_r1 = 64'h0011223344556677;
+        // pesi_r2 = 1;
+        // pedi_r2 = 64'h8899AABBCCDDEEFF;
+        // pesi_r3 = 1;
+        // pedi_r3 = 64'hFFEEDDCCBBAA9988;
+        // #10;
+        // pesi_r1 = 0;
+        // pesi_r2 = 0;
+        // pesi_r3 = 0;
 
         // Wait for data propagation
         #50;
 
         // End of test
         $finish;
+    end
+
+    // Monitor signal changes
+    initial begin
+        $monitor("Time=%0t | r1->r2: %h | r1->r3: %h | r2->r1: %h | r2->r4: %h | r3->r4: %h | r4->r3: %h", 
+            $time,
+            r1_wedo, r1_nsdo,   // r1 -> r2, r1 -> r3
+            r2_wedo, r2_nsdo,   // r2 -> r1, r2 -> r4
+            r3_wedo,            // r3 -> r4
+            r4_wedo);           // r4 -> r3
     end
 
 endmodule
