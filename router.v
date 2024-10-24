@@ -67,9 +67,13 @@ module router #(
     wire empty_e, empty_w, empty_n, empty_s, empty_pe;
     wire [4:0] grant_e, grant_w, grant_n, grant_s, grant_pe;
 
-	wire [63:0] test_wire; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	wire [63:0] data_out_w, data_out_e, data_out_n, data_out_s, data_out_pe; 
 	always@(*)begin
-		ewdo = test_wire;
+		ewdo = data_out_w;
+        wedo = data_out_e;
+		nsdo = data_out_s;
+		sndo = data_out_n;
+        pedo = data_out_pe;
 	end
 
     // Polarity generation
@@ -288,7 +292,7 @@ module router #(
         .data_in_e(data_in_ew),
         .data_in_w(),
         .receive_output(ewro),
-        .data_out(test_wire),
+        .data_out(data_out_w),
         .empty(empty_w),
         .send_output(ewso),
         .clear_pe(clear_wp),
@@ -309,7 +313,7 @@ module router #(
         .data_in_e(),
         .data_in_w(data_in_we),
         .receive_output(wero),
-        .data_out(wedo),
+        .data_out(data_out_e),
         .empty(empty_e),
         .send_output(weso),
         .clear_pe(clear_ep),
@@ -330,7 +334,7 @@ module router #(
         .data_in_e(data_in_en),
         .data_in_w(data_in_wn),
         .receive_output(snro),
-        .data_out(sndo),
+        .data_out(data_out_n),
         .empty(empty_n),
         .send_output(snso),
         .clear_pe(clear_np),
@@ -351,7 +355,7 @@ module router #(
         .data_in_e(data_in_es),
         .data_in_w(data_in_ws),
         .receive_output(nsro),
-        .data_out(nsdo),
+        .data_out(data_out_s),
         .empty(empty_s),
         .send_output(nsso),
         .clear_pe(clear_sp),
@@ -372,7 +376,7 @@ module router #(
         .data_in_e(data_in_ep),
         .data_in_w(data_in_wp),
         .receive_output(pero),
-        .data_out(pedo),
+        .data_out(data_out_pe),
         .empty(empty_pe),
         .send_output(peso),
         .clear_pe(),

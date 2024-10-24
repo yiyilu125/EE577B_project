@@ -52,20 +52,33 @@ module opctrl (
     output reg clear_w                  // Output clear signal for W
 );
 
-reg [4:0] clear;             // Clear signal indicating data was received
+// Intermediate wires to connect to signal_selector outputs
+wire clear_pe_wire;  
+wire clear_s_wire;
+wire clear_n_wire;
+wire clear_e_wire;
+wire clear_w_wire;
+reg [4:0] clear;     // Indicates the direction from which the data is received
 
-// Internal registers for even and odd data storage
 reg [63:0] mem_even;  // Storage for data when polarity = 0 (even clock cycles)
 reg [63:0] mem_odd;   // Storage for data when polarity = 1 (odd clock cycles)
+
+always @(*) begin
+    clear_pe = clear_pe_wire;
+    clear_s = clear_s_wire;
+    clear_n = clear_n_wire;
+    clear_e = clear_e_wire;
+    clear_w = clear_w_wire;
+end
 
 signal_selector uut (
     .reg_empty(empty),           // Connect empty signal to reg_empty
     .rec_clear(clear),           // Connect grant to rec_clear
-    .clear_pe(clear_pe),         // Connect outputs to clear signals
-    .clear_s(clear_s),
-    .clear_n(clear_n),
-    .clear_e(clear_e),
-    .clear_w(clear_w)
+    .clear_pe(clear_pe_wire),    // Connect intermediate wires to clear signals
+    .clear_s(clear_s_wire),
+    .clear_n(clear_n_wire),
+    .clear_e(clear_e_wire),
+    .clear_w(clear_w_wire)
 );
 
 // State signal updates
