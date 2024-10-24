@@ -49,51 +49,24 @@ module router #(
 );
 
     // Internal variable
-    wire send_req_wn;
-    wire send_req_nw;
-    wire send_req_ws;
-    wire send_req_sw;
-    wire send_req_we;
-    wire send_req_ew;
-    wire send_req_wp;
-    wire send_req_pw;
-    wire send_req_ns;
-    wire send_req_sn;
-    wire send_req_ne;
-    wire send_req_en;
-    wire send_req_np;
-    wire send_req_pn;
-    wire send_req_sp;
-    wire send_req_ps;
-    wire send_req_se;
-    wire send_req_es;
-    wire send_req_ep;
-    wire send_req_pe;
+    wire send_req_wn, send_req_nw, send_req_ws, send_req_sw, send_req_we;
+    wire send_req_ew, send_req_wp, send_req_pw, send_req_ns, send_req_sn;
+    wire send_req_ne, send_req_en, send_req_np, send_req_pn, send_req_sp;
+    wire send_req_ps, send_req_se, send_req_es, send_req_ep, send_req_pe;
 
-    wire data_in_wn;
-    wire data_in_nw;
-    wire data_in_ws;
-    wire data_in_sw;
-    wire data_in_we;
-    wire data_in_ew;
-    wire data_in_wp;
-    wire data_in_pw;
-    wire data_in_ns;
-    wire data_in_sn;
-    wire data_in_ne;
-    wire data_in_en;
-    wire data_in_np;
-    wire data_in_pn;
-    wire data_in_sp;
-    wire data_in_ps;
-    wire data_in_se;
-    wire data_in_es;
-    wire data_in_ep;
-    wire data_in_pe;
+    wire data_in_wn, data_in_nw, data_in_ws, data_in_sw, data_in_we;
+    wire data_in_ew, data_in_wp, data_in_pw, data_in_ns, data_in_sn;
+    wire data_in_ne, data_in_en, data_in_np, data_in_pn, data_in_sp;
+    wire data_in_ps, data_in_se, data_in_es, data_in_ep, data_in_pe;
 
-    wire clear_e, clear_w, clear_n, clear_s, clear_pe;
+    wire clear_wn, clear_nw, clear_ws, clear_sw, clear_we;
+    wire clear_ew, clear_wp, clear_pw, clear_ns, clear_sn;
+    wire clear_ne, clear_en, clear_np, clear_pn, clear_sp;
+    wire clear_ps, clear_se, clear_es, clear_ep, clear_pe;
+
     wire empty_e, empty_w, empty_n, empty_s, empty_pe;
     wire grant_e, grant_w, grant_n, grant_s, grant_pe;
+
 
     // Polarity generation
     always @(posedge clk) begin
@@ -116,11 +89,10 @@ module router #(
         .si(wesi),
         .datai(wedi),
         .ri(weri),
-        // .sig_buffer_clear(clear_we),
-        .buf_clear_1(),
-        .buf_clear_2(),
-        .buf_clear_3(),
-        .buf_clear_4(),
+        .buf_clear_1(clear_ew),
+        .buf_clear_2(clear_nw),
+        .buf_clear_3(clear_sw),
+        .buf_clear_4(clear_pw),
         .reqL(), 
         .reqR(send_req_we), 
         .reqU(send_req_ws), 
@@ -144,7 +116,10 @@ module router #(
         .si(ewsi),
         .datai(ewdi),
         .ri(ewri),
-        .sig_buffer_clear(clear_ew),
+        .buf_clear_1(clear_we),
+        .buf_clear_2(clear_ne),
+        .buf_clear_3(clear_es),
+        .buf_clear_4(clear_pe),
         .reqL(send_req_ew), 
         .reqR(), 
         .reqU(send_req_en), 
@@ -168,7 +143,10 @@ module router #(
         .si(nssi),
         .datai(nsdi),
         .ri(nsri),
-        .sig_buffer_clear(clear_n),
+        .buf_clear_1(clear_en),
+        .buf_clear_2(clear_wn),
+        .buf_clear_3(clear_sn),
+        .buf_clear_4(clear_np),
         .reqL(send_req_nw), 
         .reqR(send_req_ne), 
         .reqU(), 
@@ -192,7 +170,10 @@ module router #(
         .si(snsi),
         .datai(sndi),
         .ri(snri),
-        .sig_buffer_clear(clear_s),
+        .buf_clear_1(clear_ws),
+        .buf_clear_2(clear_es),
+        .buf_clear_3(clear_ns),
+        .buf_clear_4(clear_ps),
         .reqL(send_req_sw), 
         .reqR(send_req_se), 
         .reqU(send_req_sn), 
@@ -216,7 +197,10 @@ module router #(
         .si(pesi),
         .datai(pedi),
         .ri(peri),
-        .sig_buffer_clear(clear_pe),
+        .buf_clear_1(clear_wp),
+        .buf_clear_2(clear_ep),
+        .buf_clear_3(clear_sp),
+        .buf_clear_4(clear_np),
         .reqL(send_req_pw), 
         .reqR(send_req_pe), 
         .reqU(send_req_pn), 
