@@ -287,10 +287,10 @@ module router #(
         .data_out(ewdo),
         .empty(empty_w),
         .send_output(ewso),
-        .clear_pe(clear_pe),
-        .clear_s(clear_s),
-        .clear_n(clear_n),
-        .clear_e(clear_e),
+        .clear_pe(clear_wp),
+        .clear_s(clear_ws),
+        .clear_n(clear_wn),
+        .clear_e(clear_we),
         .clear_w()
     );
 
@@ -308,11 +308,11 @@ module router #(
         .data_out(wedo),
         .empty(empty_e),
         .send_output(weso),
-        .clear_pe(clear_pe),
-        .clear_s(clear_s),
-        .clear_n(clear_n),
+        .clear_pe(clear_ep),
+        .clear_s(clear_es),
+        .clear_n(clear_en),
         .clear_e(),
-        .clear_w(clear_w)
+        .clear_w(clear_ew)
     );
 
     opctrl Output_N (
@@ -329,11 +329,11 @@ module router #(
         .data_out(sndo),
         .empty(empty_n),
         .send_output(snso),
-        .clear_pe(clear_pe),
-        .clear_s(clear_s),
+        .clear_pe(clear_np),
+        .clear_s(clear_ns),
         .clear_n(),
-        .clear_e(clear_e),
-        .clear_w(clear_w)
+        .clear_e(clear_ne),
+        .clear_w(clear_nw)
     );
 
     opctrl Output_S (
@@ -350,11 +350,11 @@ module router #(
         .data_out(nsdo),
         .empty(empty_s),
         .send_output(nsso),
-        .clear_pe(clear_pe),
+        .clear_pe(clear_sp),
         .clear_s(),
-        .clear_n(clear_n),
-        .clear_e(clear_e),
-        .clear_w(clear_w)
+        .clear_n(clear_sn),
+        .clear_e(clear_se),
+        .clear_w(clear_sw)
     );
 
     opctrl Output_PE (
@@ -372,10 +372,10 @@ module router #(
         .empty(empty_pe),
         .send_output(peso),
         .clear_pe(),
-        .clear_s(clear_s),
-        .clear_n(clear_n),
-        .clear_e(clear_e),
-        .clear_w(clear_w)
+        .clear_s(clear_ps),
+        .clear_n(clear_pn),
+        .clear_e(clear_pe),
+        .clear_w(clear_pw)
     );
 
     
