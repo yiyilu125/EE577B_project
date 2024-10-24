@@ -1,8 +1,8 @@
 module input_interface #(
     parameter DATA_WIDTH = 64,  // Width of the data
-    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000; //current address in the mesh
-    parameter DIRECTION = 5'b00001; //the direction of the intput: L:10000, R:01000, U:00100, D:00010, PE:00001
-    parameter BUFFER_DEPTH = 1;
+    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000, //current address in the mesh
+    parameter DIRECTION = 5'b00001, //the direction of the intput: L:10000, R:01000, U:00100, D:00010, PE:00001
+    parameter BUFFER_DEPTH = 1
 )(
     input si,
     input ri,

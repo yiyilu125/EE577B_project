@@ -1,7 +1,7 @@
 module input_ctrl #(
     parameter DATA_WIDTH = 64,  // Width of the data
-    parameter BUFFER_DATA_WIDTH = 64;
-    parameter BUFFER_DEPTH = 1;
+    parameter BUFFER_DATA_WIDTH = 64,
+    parameter BUFFER_DEPTH = 1
 )(
     input sendI, //a signal indicates the data is sent from other node, need to catch it at this clock edge
     input [DATA_WIDTH-1:0] dataI, 

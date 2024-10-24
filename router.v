@@ -1,7 +1,7 @@
 module router #(
     parameter DATA_WIDTH = 64,  // Width of the data
-    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000; //current address in the mesh
-    parameter BUFFER_DEPTH = 1;
+    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000, //current address in the mesh
+    parameter BUFFER_DEPTH = 1
 )(
     input clk,
     input reset,

@@ -33,8 +33,8 @@ my package goes: pseudo code:
 
 module routing_algo#(
     parameter DATA_WIDTH = 64,  // Width of the data
-    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000;
-    parameter DIRECTION = 5'b00001;
+    parameter CURRENT_ADDRESS = 16'b0000_0000_0000_0000,
+    parameter DIRECTION = 5'b00001
 )(reqIn, dataIn, reqOutL, dataOutL, reqOutR, dataOutR, reqOutU, dataOutU, reqOutD, dataOutD, reqOutPE, dataOutPE);
     input reqIn;
     input [DATA_WIDTH-1:0] dataIn;
