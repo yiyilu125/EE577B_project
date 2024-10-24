@@ -47,11 +47,11 @@ module tb_routerx4();
     // Instantiate the router modules with the connections
 
     // Router 1 (bottom-left, connects to r2 on the right, r3 above)
-    router r1 #(
+    router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0000_0000_0000); //current address in the mesh
-        .BUFFER_DEPTH(1);
-    )(
+        .CURRENT_ADDRESS(16'b0000_0000_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(1)
+    ) r1 (
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -98,11 +98,11 @@ module tb_routerx4();
     );
 
     // Router 2 (bottom-right, connects to r1 on the left, r4 above)
-    router r2 #(
+    router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0001_0000_0000); //current address in the mesh
-        .BUFFER_DEPTH(1);
-    )(
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(1)
+    ) r2 (
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -149,11 +149,11 @@ module tb_routerx4();
     );
 
     // Router 3 (top-left, connects to r4 on the right, r1 below)
-    router r3 #(
+    router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0000_0000_0001); //current address in the mesh
-        .BUFFER_DEPTH(1);
-    )(
+        .CURRENT_ADDRESS(16'b0000_0000_0000_0001), //current address in the mesh
+        .BUFFER_DEPTH(1)
+    ) r3 (
         .clk(clk),
         .reset(reset),
         .polarity(polarity),
@@ -200,11 +200,11 @@ module tb_routerx4();
     );
 
     // Router 4 (top-right, connects to r3 on the left, r2 below)
-    router r4 #(
+    router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0001_0000_0001); //current address in the mesh
-        .BUFFER_DEPTH(1);
-    )(
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0001), //current address in the mesh
+        .BUFFER_DEPTH(1)
+    ) r4 (
         .clk(clk),
         .reset(reset),
         .polarity(polarity),

@@ -7,7 +7,7 @@ module input_interface #(
     input si,
     input ri,
     input clk, rst,
-    input buf_clear_1, buf_clear_2, buf_clear_3, buf_clear_4;
+    input buf_clear_1, buf_clear_2, buf_clear_3, buf_clear_4,
     input [63:0] datai,
     output [4:0] reqL, reqR, reqU, reqD, reqPE,
     output [63:0] dataoL, dataoR, dataoU, dataoD, dataoPE
@@ -17,7 +17,11 @@ module input_interface #(
 
     assign sig_buffer_clear = buf_clear_1 | buf_clear_2 | buf_clear_3 | buf_clear_4;
 
-    input_ctrl input_ctrl_uut #(.DATA_WIDTH(DATA_WIDTH), .BUFFER_DATA_WIDTH(DATA_WIDTH), .BUFFER_DEPTH(BUFFER_DEPTH))(
+    input_ctrl #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .BUFFER_DATA_WIDTH(DATA_WIDTH),
+        .BUFFER_DEPTH(BUFFER_DEPTH)
+    ) input_ctrl_uut (
         .sendI(si),
         .dataI(datai), 
         .clk(clk), 
@@ -28,7 +32,11 @@ module input_interface #(
         .sig_req_channel(req_sign_channel)
     );
 
-    routing_algo routing_algo #(.DATA_WIDTH(DATA_WIDTH), .CURRENT_ADDRESS(CURRENT_ADDRESS), .DIRECTION(DIRECTION))(
+    routing_algo #(
+        .DATA_WIDTH(DATA_WIDTH), 
+        .CURRENT_ADDRESS(CURRENT_ADDRESS), 
+        .DIRECTION(DIRECTION)
+    ) routing_algo (
         .reqIn(req_sign_channel),
         .dataIn(dataout_channel),
         .reqOutL(reqL),

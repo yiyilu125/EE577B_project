@@ -78,12 +78,12 @@ module router #(
     end
 
     // Input Interface
-    input_interface Input_W #(
+    input_interface #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(CURRENT_ADDRESS),
         .DIRECTION(5'b10000),
         .BUFFER_DEPTH(BUFFER_DEPTH)
-    )(
+    ) Input_W (
         .clk(clk),
         .rst(reset),
         .si(wesi),
@@ -105,12 +105,12 @@ module router #(
         .dataoPE(data_in_wp)
     );
 
-    input_interface Input_E #(
+    input_interface #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(CURRENT_ADDRESS),
         .DIRECTION(5'b01000),
         .BUFFER_DEPTH(BUFFER_DEPTH)
-    )(
+    ) Input_E (
         .clk(clk),
         .rst(reset),
         .si(ewsi),
@@ -132,12 +132,12 @@ module router #(
         .dataoPE(data_in_ep)
     );
 
-    input_interface Input_N #(
+    input_interface #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(CURRENT_ADDRESS),
         .DIRECTION(5'b00100),
         .BUFFER_DEPTH(BUFFER_DEPTH)
-    )(
+    ) Input_N (
         .clk(clk),
         .rst(reset),
         .si(nssi),
@@ -159,12 +159,12 @@ module router #(
         .dataoPE(data_in_np)
     );
 
-    input_interface Input_S #(
+    input_interface #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(CURRENT_ADDRESS),
         .DIRECTION(5'b00010),
         .BUFFER_DEPTH(BUFFER_DEPTH)
-    )(
+    ) Input_S (
         .clk(clk),
         .rst(reset),
         .si(snsi),
@@ -186,12 +186,12 @@ module router #(
         .dataoPE(data_in_sp)
     );
 
-    input_interface Input_PE #(
+    input_interface #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(CURRENT_ADDRESS),
         .DIRECTION(5'b00001),
         .BUFFER_DEPTH(BUFFER_DEPTH)
-    )(
+    ) Input_PE (
         .clk(clk),
         .rst(reset),
         .si(pesi),

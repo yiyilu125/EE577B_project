@@ -52,7 +52,7 @@ module opctrl (
     output reg clear_w                  // Output clear signal for W
 );
 
-output reg [4:0] clear;             // Clear signal indicating data was received
+reg [4:0] clear;             // Clear signal indicating data was received
 
 // Internal registers for even and odd data storage
 reg [63:0] mem_even;  // Storage for data when polarity = 0 (even clock cycles)
