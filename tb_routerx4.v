@@ -349,13 +349,6 @@ module tb_routerx4();
     end
 
     // Monitor signal changes
-    initial begin
-        $monitor("Time=%0t | r1->r2: %h | r1->r3: %h | r2->r1: %h | r2->r4: %h | r3->r4: %h | r4->r3: %h", 
-            $time,
-            r1_wedo, r1_nsdo,   // r1 -> r2, r1 -> r3
-            r2_wedo, r2_nsdo,   // r2 -> r1, r2 -> r4
-            r3_wedo,            // r3 -> r4
-            r4_wedo);           // r4 -> r3
-    end
+    
 
 endmodule

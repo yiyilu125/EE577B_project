@@ -67,6 +67,10 @@ module router #(
     wire empty_e, empty_w, empty_n, empty_s, empty_pe;
     wire [4:0] grant_e, grant_w, grant_n, grant_s, grant_pe;
 
+	wire [63:0] test_wire; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	always@(*)begin
+		ewdo = test_wire;
+	end
 
     // Polarity generation
     always @(posedge clk) begin
@@ -284,7 +288,7 @@ module router #(
         .data_in_e(data_in_ew),
         .data_in_w(),
         .receive_output(ewro),
-        .data_out(ewdo),
+        .data_out(test_wire),
         .empty(empty_w),
         .send_output(ewso),
         .clear_pe(clear_wp),
