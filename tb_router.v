@@ -21,17 +21,17 @@ module tb_router();
         .wesi(),
         .wedi(),
         .weri(),
-        .weso(),
-        .wero(),
-        .wedo(),
+        .weso(weso_r1_r2),
+        .wero(wero_r1_r2),
+        .wedo(wedo_r1_r2),
 
         // East to West interface (no connection to the left)
         .ewsi(),
         .ewdi(),
         .ewri(),
-        .ewso(weso_r1_r2),
-        .ewro(wero_r1_r2),
-        .ewdo(wedo_r1_r2),
+        .ewso(),
+        .ewro(),
+        .ewdo(),
 
         // North to South interface (connects to r3)
         .nssi(),
@@ -69,7 +69,7 @@ module tb_router();
         reset = 1;
         pesi_r1 = 0;
         pedi_r1 = 64'h0000_0000_0000_0000;
-        wero_r1_r2 = 0;
+        wero_r1_r2 = 1;
 
         // Apply reset
         #10 reset = 0;
@@ -77,11 +77,10 @@ module tb_router();
         // Start sending data from PE interface of router 1
         #20 pesi_r1 = 1;  // PE sends data to r1
         pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h1111_1111};  // Example data
+        #10
+        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h2222_2222};  // Example data
+        #10 pesi_r1 = 0;  // Stop sending data
 
-        #20 pesi_r1 = 0;  // Stop sending data
-        pedi_r1 = 64'h0000_0000_0000_0000;
-
-        // Trigger East-West communication (simulate wero)
         
 
         // Finish simulation after some delay
