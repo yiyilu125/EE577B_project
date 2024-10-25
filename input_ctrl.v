@@ -6,8 +6,7 @@ module input_ctrl #(
     input sendI, //a signal indicates the data is sent from other node, need to catch it at this clock edge
     input [DATA_WIDTH-1:0] dataI, 
     input clk, 
-    input rst, 
-    // input polarity, 
+    input rst,  
     input sig_channel_clean, //a router internal input signal tells if the target output buffer can be access
     output reg receiveI,    //a signal indicates has a free channel and ready to receive data
     output [DATA_WIDTH-1:0] inner_dataO, 
@@ -65,12 +64,12 @@ module input_ctrl #(
     end
 
     //next state logic
-    always @(posedge clk) begin
+    always @(cur_stat) begin
         case (cur_stat)
-            IDLE: next_state <= ODD_POLARITY; 
-            ODD_POLARITY: next_state <= EVEN_POLARITY;
-            EVEN_POLARITY: next_state <= ODD_POLARITY;
-            default: next_state <= IDLE; // Adding a default case
+            IDLE: next_state = ODD_POLARITY; 
+            ODD_POLARITY: next_state = EVEN_POLARITY;
+            EVEN_POLARITY: next_state = ODD_POLARITY;
+            default: next_state = IDLE; // Adding a default case
         endcase
     end
 

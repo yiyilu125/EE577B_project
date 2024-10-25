@@ -290,44 +290,44 @@ module tb_routerx4();
         pesi_r1 = 0; // Stop sending after 10 time units
 
         //Wait for a few cycles for data to propagate
-        #20;
+        // #20;
 
-        // Test 2: r2 sends data to r1, r3, r4
-        pesi_r2 = 1;
-        pedi_r2 = {1'b1, 2'b00, 5'b00000, 8'b0001_0000, 16'h0000,32'h4444_4444};
-        #10;
-        pesi_r2 = 0;
-        #20
-        pesi_r2 = 1;
-        pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0001_0001, 16'h0000,32'h5555_5555};
-        #10;
-        pesi_r2 = 0;
-        #20
-        pesi_r2 = 1;
-        pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0000_0001, 16'h0000,32'h6666_6666};
-        #10;
-        pesi_r2 = 0;
+        // // Test 2: r2 sends data to r1, r3, r4
+        // pesi_r2 = 1;
+        // pedi_r2 = {1'b1, 2'b00, 5'b00000, 8'b0001_0000, 16'h0000,32'h4444_4444};
+        // #10;
+        // pesi_r2 = 0;
+        // #20
+        // pesi_r2 = 1;
+        // pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0001_0001, 16'h0000,32'h5555_5555};
+        // #10;
+        // pesi_r2 = 0;
+        // #20
+        // pesi_r2 = 1;
+        // pedi_r2 = {1'b1, 2'b01, 5'b00000, 8'b0000_0001, 16'h0000,32'h6666_6666};
+        // #10;
+        // pesi_r2 = 0;
 
-        #20;
+        // #20;
 
-        // // Test 3: r3 sends data to r1, r2, r4
-        pesi_r3 = 1;
-        pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0000_0001, 16'h0000,32'h7777_7777};
-        #10;
-        pesi_r3 = 0;
-        #20
-        pesi_r3 = 1;
-        pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0001_0001, 16'h0000,32'h8888_8888};
-        #10;
-        pesi_r3 = 0;
-        #20
-        pesi_r3 = 1;
-        pedi_r3 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h9999_9999};
-        #10;
-        pesi_r3 = 0;
-        #20
+        // // // Test 3: r3 sends data to r1, r2, r4
+        // pesi_r3 = 1;
+        // pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0000_0001, 16'h0000,32'h7777_7777};
+        // #10;
+        // pesi_r3 = 0;
+        // #20
+        // pesi_r3 = 1;
+        // pedi_r3 = {1'b1, 2'b00, 5'b00000, 8'b0001_0001, 16'h0000,32'h8888_8888};
+        // #10;
+        // pesi_r3 = 0;
+        // #20
+        // pesi_r3 = 1;
+        // pedi_r3 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h9999_9999};
+        // #10;
+        // pesi_r3 = 0;
+        // #20
 
-        #20;
+        // #20;
 
         // // Test 4: r4 sends data to r1, r2, r3
         // pesi_r4 = 1;
@@ -356,19 +356,10 @@ module tb_routerx4();
         $finish;
     end
 
-    // Monitor signal changes
-    // Monitor task
-    task monitor_signals;
-        begin
-            // Display important signals at every clock cycle
-            $display("Time: %0t | clk: %0b | pesi: %0b | peri: %0b | pedi: %h | peso: %0b | pedo: %h",
-                    $time, clk, pesi, peri, pedi, peso, pedo);
-        end
-    endtask
-
-    // Continuous monitoring on every clock cycle
-    always @(posedge clk or negedge clk) begin
-        monitor_signals;
+    // $monitor statement
+    initial begin
+        $monitor("Time: %0t | clk: %0b | R1_pedi: %h | R1_pedo: %h | R2_pedi: %h | R2_pedo: %h | R3_pedi: %h | R3_pedo: %h | R4_pedi: %h | R4_pedo: %h |",
+                $time, clk, pedi_r1, pedo_r1, pedi_r2, pedo_r2, pedi_r3, pedo_r3, pedi_r4, pedo_r4);
     end
     
 
