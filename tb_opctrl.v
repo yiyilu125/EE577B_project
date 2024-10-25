@@ -50,6 +50,16 @@ module tb_opctrl;
     // Clock generation
     always #5 clk = ~clk; // 100MHz clock (10ns period)
 
+        always @(posedge clk) begin
+        if (reset) begin
+            polarity <= 1'b0; 
+        end else begin
+            polarity <= ~polarity;
+        end
+    end
+
+
+
     initial begin
         // Initialize inputs
         clk = 0;
@@ -79,7 +89,6 @@ module tb_opctrl;
         // Test data reception when `receive_output` is high
         receive_output = 1;
         grant = 5'b00001; // Grant data from PE
-        polarity = 0;     // Even clock cycle
         #10;
 
         // Check data storage in even register
@@ -90,7 +99,6 @@ module tb_opctrl;
         end
 
         // Change polarity to 1 (odd clock cycle)
-        polarity = 1;
         grant = 5'b00010; // Grant data from S
         #10;
 
@@ -112,7 +120,6 @@ module tb_opctrl;
 
         // Test `clear` signals with different grants
         receive_output = 1;
-        polarity = 0;
         grant = 5'b00100; // Grant data from N
         #10;
 
@@ -124,7 +131,6 @@ module tb_opctrl;
 
         // Test data reception from E with polarity 0 and verify output
         grant = 5'b01000; // Grant data from E
-        polarity = 0;
         #10;
 
         if (data_out !== 64'hDDDD_DDDD_DDDD_DDDD) begin
