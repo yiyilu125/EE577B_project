@@ -81,11 +81,12 @@ signal_selector uut (
     .clear_w(clear_w_wire)
 );
 
-// State signal updates
 always @(posedge clk) begin
     if (reset) begin
         empty <= 1;             // On reset, opctrl is empty and can receive data
         data_out <= 0;
+        mem_odd <= 0;
+        mem_even <= 0;
         clear <= 0;
         send_output <= 0;       // Initially, send_output is low
     end else if (receive_output) begin
@@ -124,7 +125,7 @@ always @(posedge clk) begin
             clear <= grant;        // Send a clear signal to the data source based on the grant signal
 
             // Update send_output based on whether receive_output is high and data is valid
-            send_output <= receive_output;  // Set send_output high if there is space to receive data
+            send_output <= 1;      // Set send_output high when data is ready
         end else begin
             empty <= 1;            // If no data is received, keep empty high
             clear <= 0;            // Clear the clear signal
