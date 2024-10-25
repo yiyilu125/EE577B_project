@@ -89,14 +89,19 @@ module tb_router();
         #10
         pedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h2222_2222};  // Example data
         wedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h8888_8888};  // Example data
-        #10 
-        pesi_r1 = 0;  // Stop sending data
-        wesi_r1 = 0;  // Stop sending data
 
-        
+        #10
+        wero_r1_r2 = 0;
+
+        #10
+        wero_r1_r2 = 1;
+
+        #10
+        pesi_r1 = 0;  // Stop sending data
+        wesi_r1 = 0;  // Stop sending data        
 
         // Finish simulation after some delay
-        #50 $finish;
+        #100 $finish;
     end
 
     // Always-on monitor
