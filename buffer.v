@@ -4,7 +4,7 @@ module buffer #(
 ) (clk, rst, rd_en, wr_en, data_in, data_out, full, empty);
     input clk, rst, rd_en, wr_en;
     input [DATA_WIDTH-1:0] data_in;
-    output reg [DATA_WIDTH-1:0] data_out;
+    output [DATA_WIDTH-1:0] data_out;
     output reg full; // full flag
     output reg empty; // empty flag
 
@@ -21,7 +21,7 @@ module buffer #(
             // Reset the buffer state
             buffer_full <= 0;
             buffer_empty <= 1;
-            data_out <= {DATA_WIDTH{1'b0}};
+            //data_out <= {DATA_WIDTH{1'b0}};
         end else begin
             if (wr_en && !buffer_full) begin
                 // Write data to the buffer if it's not full
@@ -32,7 +32,7 @@ module buffer #(
 
             if (rd_en && !buffer_empty) begin
                 // Read data from the buffer if it's not empty
-                data_out <= buffer_mem[0];
+                //data_out <= buffer_mem[0];
                 buffer_full <= 0;
                 buffer_empty <= 1;
             end
@@ -44,4 +44,6 @@ module buffer #(
         full = buffer_full;
         empty = buffer_empty;
     end
+
+    assign data_out = buffer_mem[0];
 endmodule

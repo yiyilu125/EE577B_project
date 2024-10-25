@@ -36,7 +36,7 @@ module input_interface #(
         .DATA_WIDTH(DATA_WIDTH), 
         .CURRENT_ADDRESS(CURRENT_ADDRESS), 
         .DIRECTION(DIRECTION)
-    ) routing_algo (
+    ) routing_algo_uut (
         .reqIn(req_sign_channel),
         .dataIn(dataout_channel),
         .reqOutL(reqL),

@@ -62,63 +62,64 @@ module routing_algo#(
     //routing algo
     always@(*)begin
         //default:
-        reqOutL=0;
-        reqOutR=0;
-        reqOutU=0;
-        reqOutD=0;
-        reqOutPE=0;
+        reqOutL=5'b0;
+        reqOutR=5'b0;
+        reqOutU=5'b0;
+        reqOutD=5'b0;
+        reqOutPE=5'b0;
 
         dataOutU = 64'b0;
         dataOutD = 64'b0;
         dataOutL = 64'b0;
         dataOutR = 64'b0;
         dataOutPE = 64'b0;
-
-        if (dataIn[dir_x] == 1) begin
-            if (dataIn[source_x_msb:source_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == CURRENT_ADDRESS[current_x_msb:current_x_lsb]) begin
-                if(dataIn[dir_y] == 1) begin
-                    if(dataIn[source_y_msb:source_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == CURRENT_ADDRESS[current_y_msb:current_y_lsb])begin
-                        reqOutPE= DIRECTION;
-                        dataOutPE = dataIn;
+        if(reqIn == 1) begin
+            if (dataIn[dir_x] == 1) begin
+                if (dataIn[source_x_msb:source_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == CURRENT_ADDRESS[current_x_msb:current_x_lsb]) begin
+                    if(dataIn[dir_y] == 1) begin
+                        if(dataIn[source_y_msb:source_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == CURRENT_ADDRESS[current_y_msb:current_y_lsb])begin
+                            reqOutPE= DIRECTION;
+                            dataOutPE = dataIn;
+                        end else begin
+                            reqOutU = DIRECTION;
+                            dataOutU = dataIn;
+                        end
                     end else begin
-                        reqOutU = DIRECTION;
-                        dataOutU = dataIn;
-                    end
+                        if(CURRENT_ADDRESS[current_y_msb:current_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == dataIn[source_y_msb:source_y_lsb])begin
+                            reqOutPE= DIRECTION;
+                            dataOutPE = dataIn;
+                        end else begin
+                            reqOutD = DIRECTION;
+                            dataOutD = dataIn;
+                        end
+                    end 
                 end else begin
-                    if(CURRENT_ADDRESS[current_y_msb:current_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == dataIn[source_y_msb:source_y_lsb])begin
-                        reqOutPE= DIRECTION;
-                        dataOutPE = dataIn;
-                    end else begin
-                        reqOutD = DIRECTION;
-                        dataOutD = dataIn;
-                    end
-                end 
+                    reqOutR = DIRECTION;
+                    dataOutR = dataIn;
+                end
             end else begin
-                reqOutR = DIRECTION;
-                dataOutR = dataIn;
-            end
-        end else begin
-            if (dataIn[source_x_msb:source_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == CURRENT_ADDRESS[current_x_msb:current_x_lsb]) begin
-                if(dataIn[dir_y] == 1) begin
-                    if(dataIn[source_y_msb:source_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == CURRENT_ADDRESS[current_y_msb:current_y_lsb])begin
-                        reqOutPE= DIRECTION;
-                        dataOutPE = dataIn;
+                if (dataIn[source_x_msb:source_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == CURRENT_ADDRESS[current_x_msb:current_x_lsb]) begin
+                    if(dataIn[dir_y] == 1) begin
+                        if(dataIn[source_y_msb:source_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == CURRENT_ADDRESS[current_y_msb:current_y_lsb])begin
+                            reqOutPE= DIRECTION;
+                            dataOutPE = dataIn;
+                        end else begin
+                            reqOutU = DIRECTION;
+                            dataOutU = dataIn;
+                        end
                     end else begin
-                        reqOutU = DIRECTION;
-                        dataOutU = dataIn;
-                    end
+                        if(CURRENT_ADDRESS[current_y_msb:current_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == dataIn[source_y_msb:source_y_lsb])begin
+                            reqOutPE= DIRECTION;
+                            dataOutPE = dataIn;
+                        end else begin
+                            reqOutD = DIRECTION;
+                            dataOutD = dataIn;
+                        end
+                    end 
                 end else begin
-                    if(CURRENT_ADDRESS[current_y_msb:current_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == dataIn[source_y_msb:source_y_lsb])begin
-                        reqOutPE= DIRECTION;
-                        dataOutPE = dataIn;
-                    end else begin
-                        reqOutD = DIRECTION;
-                        dataOutD = dataIn;
-                    end
-                end 
-            end else begin
-                reqOutL = DIRECTION;
-                dataOutL = dataIn;
+                    reqOutL = DIRECTION;
+                    dataOutL = dataIn;
+                end
             end
         end
     end
