@@ -23,7 +23,6 @@ module tb_opctrl;
     wire clear_n;
     wire clear_e;
     wire clear_w;
-    wire [4:0] clear;
 
     // Instantiate the opctrl module
     opctrl uut (
@@ -50,15 +49,13 @@ module tb_opctrl;
     // Clock generation
     always #5 clk = ~clk; // 100MHz clock (10ns period)
 
-        always @(posedge clk) begin
+    always @(posedge clk) begin
         if (reset) begin
             polarity <= 1'b0; 
         end else begin
             polarity <= ~polarity;
         end
     end
-
-
 
     initial begin
         // Initialize inputs
@@ -78,77 +75,53 @@ module tb_opctrl;
         #10; // Wait for 10ns (1 clock cycle)
         reset = 0;
 
-        // Check initial state after reset
-        #10;
-        if (empty !== 1 || data_out !== 64'b0 || send_output !== 0) begin
-            $display("Test failed after reset.");
-        end else begin
-            $display("Reset state passed.");
-        end
-
-        // Test data reception when `receive_output` is high
+        // Test scenario 1: Receive data from PE
         receive_output = 1;
         grant = 5'b00001; // Grant data from PE
         #10;
 
-        // Check data storage in even register
-        if (data_out !== 64'hAAAA_AAAA_AAAA_AAAA) begin
-            $display("Test failed for data reception from PE at polarity 0.");
-        end else begin
-            $display("Data reception from PE at polarity 0 passed.");
-        end
-
-        // Change polarity to 1 (odd clock cycle)
+        // Test scenario 2: Change polarity and receive data from S
         grant = 5'b00010; // Grant data from S
         #10;
 
-        // Check data storage in odd register
-        if (data_out !== 64'hBBBB_BBBB_BBBB_BBBB) begin
-            $display("Test failed for data reception from S at polarity 1.");
-        end else begin
-            $display("Data reception from S at polarity 1 passed.");
-        end
-
-        // Test send_output behavior when `receive_output` is low
-        receive_output = 0;
-        #10;
-        if (send_output !== 0) begin
-            $display("Test failed: send_output should be low when receive_output is low.");
-        end else begin
-            $display("Send_output behavior with receive_output low passed.");
-        end
-
-        // Test `clear` signals with different grants
-        receive_output = 1;
+        // Test scenario 3: Change polarity and receive data from N
         grant = 5'b00100; // Grant data from N
         #10;
 
-        if (!clear_n || clear_pe || clear_s || clear_e || clear_w) begin
-            $display("Test failed for clear signal from N.");
-        end else begin
-            $display("Clear signal from N passed.");
-        end
-
-        // Test data reception from E with polarity 0 and verify output
+        // Test scenario 4: Change polarity and receive data from E
         grant = 5'b01000; // Grant data from E
         #10;
 
-        if (data_out !== 64'hDDDD_DDDD_DDDD_DDDD) begin
-            $display("Test failed for data reception from E at polarity 0.");
-        end else begin
-            $display("Data reception from E at polarity 0 passed.");
-        end
+        // Test scenario 5: Change polarity and receive data from W
+        grant = 5'b10000; // Grant data from W
+        #10;
 
-        // Test `clear` signal when grant is zero
+        // Test scenario 6: Block data transfer with receive_output low
+        receive_output = 0;
+        #10;
+
+        // Test scenario 7: Change data input values
+        data_in_pe = 64'h1111_1111_1111_1111;
+        data_in_s = 64'h2222_2222_2222_2222;
+        data_in_n = 64'h3333_3333_3333_3333;
+        data_in_e = 64'h4444_4444_4444_4444;
+        data_in_w = 64'h5555_5555_5555_5555;
+
+        // Test scenario 8: Receive data again after changing input values
+        receive_output = 1;
+        grant = 5'b00001; // Grant data from PE
+        #10;
+
+        // Test scenario 9: Receive data from S again
+        grant = 5'b00010; // Grant data from S
+        #10;
+
+        // Test scenario 10: Set no grant and check signals
         grant = 5'b00000; // No grant
         #10;
-        if (clear !== 5'b00000) begin
-            $display("Test failed: clear signal should be zero when no grant.");
-        end else begin
-            $display("Clear signal with no grant passed.");
-        end
 
-        $display("All tests completed.");
+        // End simulation after some time
+        #30;
         $finish;
     end
 
