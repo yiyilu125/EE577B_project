@@ -78,7 +78,7 @@ module tb_router();
         #20 pesi_r1 = 1;  // PE sends data to r1
         pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h1111_1111};  // Example data
 
-        #30 pesi_r1 = 0;  // Stop sending data
+        #20 pesi_r1 = 0;  // Stop sending data
         pedi_r1 = 64'h0000_0000_0000_0000;
 
         // Trigger East-West communication (simulate wero)
