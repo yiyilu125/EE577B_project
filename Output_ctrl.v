@@ -1,5 +1,4 @@
 module signal_selector (
-    // input wire reg_empty,           // Indicates if the module has received any packets
     input wire [4:0] rec_clear,     // 5-bit one-hot signal for selecting one output
     output reg clear_pe,            // Output corresponding to rec_clear[0]
     output reg clear_s,             // Output corresponding to rec_clear[1]
@@ -9,21 +8,11 @@ module signal_selector (
 );
 
 always @(*) begin
-    // if (reg_empty) begin
-    //     // If reg_empty is 1, no packet is received, all outputs remain 0
-    //     clear_pe = 0;
-    //     clear_s = 0;
-    //     clear_n = 0;
-    //     clear_e = 0;
-    //     clear_w = 0;
-    // end else begin
-        // If reg_empty is 0, select the output based on rec_clear
-        clear_pe = rec_clear[0];
-        clear_s = rec_clear[1];
-        clear_n = rec_clear[2];
-        clear_e = rec_clear[3];
-        clear_w = rec_clear[4];
-    // end
+    clear_pe = rec_clear[0];
+    clear_s = rec_clear[1];
+    clear_n = rec_clear[2];
+    clear_e = rec_clear[3];
+    clear_w = rec_clear[4];
 end
 
 endmodule
@@ -72,7 +61,6 @@ always @(*) begin
 end
 
 signal_selector uut (
-    // .reg_empty(empty),           // Connect empty signal to reg_empty
     .rec_clear(clear),           // Connect grant to rec_clear
     .clear_pe(clear_pe_wire),    // Connect intermediate wires to clear signals
     .clear_s(clear_s_wire),
@@ -109,9 +97,6 @@ always @(posedge clk) begin
                     end
                 endcase
                 empty_even <= 0; // Set empty to low after receiving data
-                clear <= grant; // Indicate which input to clear
-            end else begin
-                clear <= 0;
             end
 
             // Output logic for even memory
@@ -138,9 +123,6 @@ always @(posedge clk) begin
                     end
                 endcase
                 empty_odd <= 0; // Set empty to low after receiving data
-                clear <= grant; // Indicate which input to clear
-            end else begin
-                clear <= 0;
             end
 
             // Output logic for odd memory
@@ -157,13 +139,16 @@ always @(posedge clk) begin
 end
 
 
-// Update the empty signal based on the current polarity
+// Update clear and empty signals based on the current polarity and empty status
 always @(*) begin
     if (polarity == 0) begin
-        empty = empty_even; // Check if even memory is empty
+        empty = empty_even;       // When polarity is 0, reflect the status of empty_even
+        clear = empty_even ? grant : 0; // Set clear to grant if even memory is empty
     end else begin
-        empty = empty_odd; // Check if odd memory is empty
+        empty = empty_odd;        // When polarity is 1, reflect the status of empty_odd
+        clear = empty_odd ? grant : 0;  // Set clear to grant if odd memory is empty
     end
 end
+
 
 endmodule
