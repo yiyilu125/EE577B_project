@@ -8,7 +8,6 @@ module tb_input_ctrl;
     reg [63:0] dataI;
     reg clk;
     reg rst;
-    reg polarity;
     reg sig_channel_clean;
 
     // Outputs
@@ -42,36 +41,31 @@ module tb_input_ctrl;
         sendI = 0;
         dataI = 64'h0;
         rst = 1; // Assert reset
-        sig_channel_clean = 0;
+        sig_channel_clean = 1;
 
         // Wait for global reset
         #10;
         rst = 0; // Deassert reset
 
-        // // Test Case 1: Send data with ODD_POLARITY state
-        // #10;
-        // sendI = 1; // Signal to send data
-        // dataI = 64'hA5A5A5A5A5A5A5A5; // Sample data
-        // sig_channel_clean = 1; // Allow reading from buffer
+        // Test Case 1: Send data with ODD_POLARITY state
+        #10;
+        sendI = 1; // Signal to send data
+        dataI = 64'hA5A5A5A5A5A5A5A5; // Sample data
+        // Wait for a clock cycle
 
-        // // Wait for a clock cycle
-        // #10;
-        // sig_channel_clean = 0; // Disable reading from buffer
+        // Test Case 2: Change polarity and check EVEN_POLARITY state
+        #10;
+        sendI = 1; // Signal to send data
+        dataI = 64'h5A5A5A5A5A5A5A5A; // Sample data
 
-        // // Test Case 2: Change polarity and check EVEN_POLARITY state
-        // #10;
-        // sendI = 1; // Signal to send data
-        // dataI = 64'h5A5A5A5A5A5A5A5A; // Sample data
+        // Wait for a clock cycle
+        #10;
 
-        // // Wait for a clock cycle
-        // #10;
-        // sig_channel_clean = 1; // Allow reading from buffer
-
-        // // Test Case 3: Reset the module
-        // #10;
-        // rst = 1; // Assert reset
-        // #10;
-        // rst = 0; // Deassert reset
+        // Test Case 3: Reset the module
+        #10;
+        rst = 1; // Assert reset
+        #10;
+        rst = 0; // Deassert reset
 
         // Finish simulation after a few cycles
         #50;

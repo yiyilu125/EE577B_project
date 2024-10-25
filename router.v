@@ -10,7 +10,7 @@ module router #(
     // West to East interface
     input wesi,
     input [63:0] wedi,
-    output reg weri,
+    output weri,
     output weso,
     input wero,
     output reg [63:0] wedo,
@@ -18,7 +18,7 @@ module router #(
     // East to West interface
     input ewsi,
     input [63:0] ewdi,
-    output reg ewri,
+    output ewri,
     output ewso,
     input ewro,
     output reg [63:0] ewdo,
@@ -34,7 +34,7 @@ module router #(
     // South to North interface
     input snsi,
     input [63:0] sndi,
-    output reg snri,
+    output snri,
     output snso,
     input snro,
     output reg [63:0] sndo,
@@ -42,7 +42,7 @@ module router #(
     // NIC & PE interface
     input pesi,
     input [63:0] pedi,
-    output reg peri,
+    output peri,
     output peso,
     input pero,
     output reg [63:0] pedo

@@ -5,10 +5,10 @@ module input_interface #(
     parameter BUFFER_DEPTH = 1
 )(
     input si,
-    input ri,
     input clk, rst,
     input buf_clear_1, buf_clear_2, buf_clear_3, buf_clear_4,
     input [63:0] datai,
+    output ri,
     output [4:0] reqL, reqR, reqU, reqD, reqPE,
     output [63:0] dataoL, dataoR, dataoU, dataoD, dataoPE
 );
