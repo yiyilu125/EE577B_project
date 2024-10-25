@@ -13,7 +13,7 @@ module tb_router();
 
     router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0000_0000_0000), //current address in the mesh
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0000), //current address in the mesh
         .BUFFER_DEPTH(1)
     ) r1 (
         .clk(clk),
@@ -82,13 +82,13 @@ module tb_router();
         // Start sending data from PE interface of router 1
         #20 
         pesi_r1 = 1;  // PE sends data to r1
-        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h1111_1111};  // Example data
-        // wesi_r1 = 1;
-        // wedi_r1 = {1'b1, 2'b01, 5'b00000, 8'b0001_0001, 16'h0001,32'h9999_9999};  // Example data
+        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h1111_1111};  // Example data
+        wesi_r1 = 1;
+        wedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h9999_9999};  // Example data
 
         #10
-        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0000,32'h2222_2222};  // Example data
-        // wedi_r1 = {1'b1, 2'b01, 5'b00000, 8'b0001_0001, 16'h0001,32'h8888_8888};  // Example data
+        pedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h2222_2222};  // Example data
+        wedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h8888_8888};  // Example data
         #10 
         pesi_r1 = 0;  // Stop sending data
         wesi_r1 = 0;  // Stop sending data
