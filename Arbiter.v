@@ -76,6 +76,7 @@ module round_robin_arbiter (
 	begin
         if (rst) 
 		begin
+            grant <= 0;
             state <= state_req0;
         end 
 		else 
