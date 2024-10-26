@@ -100,7 +100,7 @@ always @(posedge clk) begin
             end
 
             // Output logic for even memory
-            if (receive_output) begin
+            if (receive_output && ~empty_odd) begin
                 data_out <= mem_odd;
                 send_output <= 1;
                 mem_odd <= 0;
@@ -126,7 +126,7 @@ always @(posedge clk) begin
             end
 
             // Output logic for odd memory
-            if (receive_output) begin
+            if (receive_output && ~empty_even) begin
                 data_out <= mem_even;
                 send_output <= 1;
                 mem_even <= 0;
