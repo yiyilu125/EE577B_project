@@ -98,7 +98,7 @@ module routing_algo#(
                     dataOutR = dataIn;
                 end
             end else begin
-                if (dataIn[source_x_msb:source_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == CURRENT_ADDRESS[current_x_msb:current_x_lsb]) begin
+                if (CURRENT_ADDRESS[current_x_msb:current_x_lsb] + dataIn[hop_x_msb:hop_x_lsb] == dataIn[source_x_msb:source_x_lsb]) begin
                     if(dataIn[dir_y] == 1) begin
                         if(dataIn[source_y_msb:source_y_lsb] + dataIn[hop_y_msb:hop_y_lsb] == CURRENT_ADDRESS[current_y_msb:current_y_lsb])begin
                             reqOutPE= DIRECTION;
