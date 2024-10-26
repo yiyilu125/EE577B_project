@@ -6,6 +6,8 @@ module mesh4x4 #(
     parameter DATA_WIDTH = 64,  // Width of the data
     parameter DEPTH = 1         // Depth of the buffer
 )(
+    input clk, reset,
+    output polarity,
     //row: r0-r3
     input pesi_r0, pero_r0, pesi_r1, pero_r1, 
           pesi_r2, pero_r2, pesi_r3, pero_r3,
