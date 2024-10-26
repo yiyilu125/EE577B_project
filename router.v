@@ -108,8 +108,8 @@ module router #(
         .reqPE(send_req_wp), 
         .dataoL(), 
         .dataoR(data_in_we), 
-        .dataoU(data_in_ws), 
-        .dataoD(data_in_wn), 
+        .dataoU(data_in_wn), 
+        .dataoD(data_in_ws), 
         .dataoPE(data_in_wp)
     );
 
