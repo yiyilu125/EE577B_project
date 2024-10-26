@@ -72,7 +72,7 @@ module tb_mesh4x4;
         pesi_20 = 0; pesi_21 = 0; pesi_22 = 0; pesi_23 = 0;
         pesi_30 = 0; pesi_31 = 0; pesi_32 = 0; pesi_33 = 0;
 
-        #15 reset = 0; // Release reset
+        #10 reset = 0; // Release reset
 
 
         // Test 1: R(1,1) sends package to all other nodes

@@ -13,7 +13,7 @@ module tb_router();
 
     router #(
         .DATA_WIDTH(64),
-        .CURRENT_ADDRESS(16'b0000_0001_0000_0000), //current address in the mesh
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0001), //current address in the mesh
         .BUFFER_DEPTH(1)
     ) r1 (
         .clk(clk),
@@ -21,17 +21,17 @@ module tb_router();
         .polarity(polarity),
 
         // West to East interface (connects to r2)
-        .wesi(wesi_r1),
-        .wedi(wedi_r1),
-        .weri(weri_r1),
-        .weso(weso_r1_r2),
-        .wero(wero_r1_r2),
-        .wedo(wedo_r1_r2),
+        .wesi(),
+        .wedi(),
+        .weri(),
+        .weso(),
+        .wero(),
+        .wedo(),
 
         // East to West interface (no connection to the left)
-        .ewsi(),
-        .ewdi(),
-        .ewri(),
+        .ewsi(wesi_r1),
+        .ewdi(wedi_r1),
+        .ewri(weri_r1),
         .ewso(),
         .ewro(),
         .ewdo(),
@@ -40,9 +40,9 @@ module tb_router();
         .nssi(),
         .nsdi(),
         .nsri(),
-        .nsso(),
-        .nsro(),
-        .nsdo(),
+        .nsso(weso_r1_r2),
+        .nsro(wero_r1_r2),
+        .nsdo(wedo_r1_r2),
 
         // South to North interface (no connection below)
         .snsi(),
@@ -81,23 +81,23 @@ module tb_router();
 
         // Start sending data from PE interface of router 1
         #20 
-        pesi_r1 = 1;  // PE sends data to r1
-        pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h1111_1111};  // Example data
+        // pesi_r1 = 1;  // PE sends data to r1
+        // pedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h1111_1111};  // Example data
         wesi_r1 = 1;
-        wedi_r1 = {1'b1, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h9999_9999};  // Example data
+        wedi_r1 = {1'b0, 2'b00, 5'b00000, 8'h11, 16'h0201, 32'hAAAA_AAAA};  // Example data
+
+        // #10
+        // pedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h2222_2222};  // Example data
+        // wedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h8888_8888};  // Example data
+
+        // #10
+        // wero_r1_r2 = 0;
+
+        // #10
+        // wero_r1_r2 = 1;
 
         #10
-        pedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0001_0000, 16'h0100, 32'h2222_2222};  // Example data
-        wedi_r1 = {1'b0, 2'b10, 5'b00000, 8'b0010_0000, 16'h0000, 32'h8888_8888};  // Example data
-
-        #10
-        wero_r1_r2 = 0;
-
-        #10
-        wero_r1_r2 = 1;
-
-        #10
-        pesi_r1 = 0;  // Stop sending data
+        // pesi_r1 = 0;  // Stop sending data
         wesi_r1 = 0;  // Stop sending data        
 
         // Finish simulation after some delay
