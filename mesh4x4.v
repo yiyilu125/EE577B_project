@@ -6,10 +6,17 @@ module mesh4x4 #(
     parameter DATA_WIDTH = 64,  // Width of the data
     parameter DEPTH = 1         // Depth of the buffer
 )(
-    input a;
-    output b;
-)
-    //vertical wires for column 0: for r0 <--> r1 <--> r2 <--> r3
+    //row: r0-r3
+    input pesi_r0, pero_r0, pesi_r1, pero_r1, 
+          pesi_r2, pero_r2, pesi_r3, pero_r3,
+    input [DATA_WIDTH-1:0] pedi_r0, pedi_r1, 
+                            pedi_r2, pedi_r3,
+    output peri_r0, peso_r0, peri_r1, peso_r1, 
+           peri_r2, peso_r2, peri_r3, peso_r3,
+    output [DATA_WIDTH-1:0] pedo_r0, pedo_r1, 
+                             pedo_r2, pedo_r3
+);
+    //vertical wires for column 0: for r0 <--> r1 <--> r2 <--> r3 and PE
     wire wes_r0_r1, wer_r0_r1;
     wire ews_r1_r0, ewr_r1_r0;
     wire [DATA_WIDTH-1:0] wed_r0_r1, ewd_r1_r0;
@@ -19,7 +26,8 @@ module mesh4x4 #(
     wire wes_r2_r3, wer_r2_r3;
     wire ews_r3_r2, ewr_r3_r2;
     wire [DATA_WIDTH-1:0] wed_r2_r3, ewd_r3_r2;
-    //vertical wires for column 1: for r4 <--> r5 <--> r6 <--> r7
+    
+    //vertical wires for column 1: for r4 <--> r5 <--> r6 <--> r7 and PE
     wire wes_r4_r5, wer_r4_r5;
     wire ews_r5_r4, ewr_r5_r4;
     wire [DATA_WIDTH-1:0] wed_r4_r5, ewd_r5_r4;
@@ -93,6 +101,7 @@ module mesh4x4 #(
     wire nss_r15_r11, snr_r15_r11;
     wire [DATA_WIDTH-1:0] snd_r11_r15, nsd_r15_r11;
 
+    //r0 <--> r1 <--> r2 <--> r3
     router #(
         .DATA_WIDTH(DATA_WIDTH),
         .CURRENT_ADDRESS(16'b0000_0000_0000_0000), //current address in the mesh
@@ -102,26 +111,26 @@ module mesh4x4 #(
         .reset(reset),
         .polarity(polarity),
 
-        // West to East interface (connects to r2)
+        // West to East interface (connects to r1)
         .wesi(),
         .wedi(),
         .weri(),
-        .weso(),
-        .wero(),
-        .wedo(),
+        .weso(wes_r0_r1),
+        .wero(wer_r0_r1),
+        .wedo(wed_r0_r1),
 
         // East to West interface (no connection to the left)
-        .ewsi(),
-        .ewdi(),
-        .ewri(),
+        .ewsi(ews_r1_r0),
+        .ewdi(ewd_r1_r0),
+        .ewri(ewr_r1_r0),
         .ewso(),
         .ewro(),
         .ewdo(),
 
         // North to South interface (connects to r3)
-        .nssi(),
-        .nsdi(),
-        .nsri(),
+        .nssi(nss_r4_r0),
+        .nsdi(nsd_r4_r0),
+        .nsri(nsr_r4_r0),
         .nsso(),
         .nsro(),
         .nsdo(),
@@ -130,16 +139,366 @@ module mesh4x4 #(
         .snsi(),
         .sndi(),
         .snri(),
-        .snso(),
-        .snro(),
-        .sndo(),
+        .snso(sns_r0_r4),
+        .snro(snr_r0_r4),
+        .sndo(snd_r0_r4),
 
         // NIC & PE interface (external input/output)
-        .pesi(),
-        .pedi(),
-        .peri(),
-        .peso(),
-        .pero(),
-        .pedo()
+        .pesi(pesi_r0),
+        .pedi(pedi_r0),
+        .peri(peri_r0),
+        .peso(peso_r0),
+        .pero(pero_r0),
+        .pedo(pedo_r0)
     );
-endmodule;
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0001_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r1 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r0_r1),
+        .wedi(wed_r0_r1),
+        .weri(wer_r0_r1),
+        .weso(wes_r1_r2),
+        .wero(wer_r1_r2),
+        .wedo(wed_r1_r2),
+
+        // East to West interface (no connection to the left)
+        .ewsi(ews_r2_r1),
+        .ewdi(ewd_r2_r1),
+        .ewri(ewr_r2_r1),
+        .ewso(ews_r1_r0),
+        .ewro(ewr_r1_r0),
+        .ewdo(ewd_r1_r0),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r5_r1),
+        .nsdi(nsd_r5_r1),
+        .nsri(nsr_r5_r1),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r1_r5),
+        .snro(snr_r1_r5),
+        .sndo(snd_r1_r5),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r1),
+        .pedi(pedi_r1),
+        .peri(peri_r1),
+        .peso(peso_r1),
+        .pero(pero_r1),
+        .pedo(pedo_r1)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0010_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r2 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r1_r2),
+        .wedi(wed_r1_r2),
+        .weri(wer_r1_r2),
+        .weso(wes_r2_r3),
+        .wero(wer_r2_r3),
+        .wedo(wed_r2_r3),
+
+        // East to West interface (no connection to the left)
+        .ewsi(ews_r3_r2),
+        .ewdi(ewd_r3_r2),
+        .ewri(ewr_r3_r2),
+        .ewso(ews_r2_r1),
+        .ewro(ewr_r2_r1),
+        .ewdo(ewd_r2_r1),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r6_r2),
+        .nsdi(nsd_r6_r2),
+        .nsri(nsr_r6_r2),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r2_r6),
+        .snro(snr_r2_r6),
+        .sndo(snd_r2_r6),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r2),
+        .pedi(pedi_r2),
+        .peri(peri_r2),
+        .peso(peso_r2),
+        .pero(pero_r2),
+        .pedo(pedo_r2)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0011_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r3 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r2_r3),
+        .wedi(wed_r2_r3),
+        .weri(wer_r2_r3),
+        .weso(),
+        .wero(),
+        .wedo(),
+
+        // East to West interface (no connection to the left)
+        .ewsi(),
+        .ewdi(),
+        .ewri(),
+        .ewso(ews_r3_r2),
+        .ewro(ewr_r3_r2),
+        .ewdo(ewd_r3_r2),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r7_r3),
+        .nsdi(nsd_r7_r3),
+        .nsri(nsr_r7_r3),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r3_r7),
+        .snro(snr_r3_r7),
+        .sndo(snd_r3_r7),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r3),
+        .pedi(pedi_r3),
+        .peri(peri_r3),
+        .peso(peso_r3),
+        .pero(pero_r3),
+        .pedo(pedo_r3)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0011_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r4 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r2_r3),
+        .wedi(wed_r2_r3),
+        .weri(wer_r2_r3),
+        .weso(),
+        .wero(),
+        .wedo(),
+
+        // East to West interface (no connection to the left)
+        .ewsi(),
+        .ewdi(),
+        .ewri(),
+        .ewso(ews_r3_r2),
+        .ewro(ewr_r3_r2),
+        .ewdo(ewd_r3_r2),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r7_r3),
+        .nsdi(nsd_r7_r3),
+        .nsri(nsr_r7_r3),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r3_r7),
+        .snro(snr_r3_r7),
+        .sndo(snd_r3_r7),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r3),
+        .pedi(pedi_r3),
+        .peri(peri_r3),
+        .peso(peso_r3),
+        .pero(pero_r3),
+        .pedo(pedo_r3)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0011_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r5 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r2_r3),
+        .wedi(wed_r2_r3),
+        .weri(wer_r2_r3),
+        .weso(),
+        .wero(),
+        .wedo(),
+
+        // East to West interface (no connection to the left)
+        .ewsi(),
+        .ewdi(),
+        .ewri(),
+        .ewso(ews_r3_r2),
+        .ewro(ewr_r3_r2),
+        .ewdo(ewd_r3_r2),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r7_r3),
+        .nsdi(nsd_r7_r3),
+        .nsri(nsr_r7_r3),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r3_r7),
+        .snro(snr_r3_r7),
+        .sndo(snd_r3_r7),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r3),
+        .pedi(pedi_r3),
+        .peri(peri_r3),
+        .peso(peso_r3),
+        .pero(pero_r3),
+        .pedo(pedo_r3)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0011_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r6 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r2_r3),
+        .wedi(wed_r2_r3),
+        .weri(wer_r2_r3),
+        .weso(),
+        .wero(),
+        .wedo(),
+
+        // East to West interface (no connection to the left)
+        .ewsi(),
+        .ewdi(),
+        .ewri(),
+        .ewso(ews_r3_r2),
+        .ewro(ewr_r3_r2),
+        .ewdo(ewd_r3_r2),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r7_r3),
+        .nsdi(nsd_r7_r3),
+        .nsri(nsr_r7_r3),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r3_r7),
+        .snro(snr_r3_r7),
+        .sndo(snd_r3_r7),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r3),
+        .pedi(pedi_r3),
+        .peri(peri_r3),
+        .peso(peso_r3),
+        .pero(pero_r3),
+        .pedo(pedo_r3)
+    );
+
+    router #(
+        .DATA_WIDTH(DATA_WIDTH),
+        .CURRENT_ADDRESS(16'b0000_0011_0000_0000), //current address in the mesh
+        .BUFFER_DEPTH(DEPTH)
+    ) r7 (
+        .clk(clk),
+        .reset(reset),
+        .polarity(polarity),
+
+        // West to East interface (connects to r2)
+        .wesi(wes_r2_r3),
+        .wedi(wed_r2_r3),
+        .weri(wer_r2_r3),
+        .weso(),
+        .wero(),
+        .wedo(),
+
+        // East to West interface (no connection to the left)
+        .ewsi(),
+        .ewdi(),
+        .ewri(),
+        .ewso(ews_r3_r2),
+        .ewro(ewr_r3_r2),
+        .ewdo(ewd_r3_r2),
+
+        // North to South interface (connects to r3)
+        .nssi(nss_r7_r3),
+        .nsdi(nsd_r7_r3),
+        .nsri(nsr_r7_r3),
+        .nsso(),
+        .nsro(),
+        .nsdo(),
+
+        // South to North interface (no connection below)
+        .snsi(),
+        .sndi(),
+        .snri(),
+        .snso(sns_r3_r7),
+        .snro(snr_r3_r7),
+        .sndo(snd_r3_r7),
+
+        // NIC & PE interface (external input/output)
+        .pesi(pesi_r3),
+        .pedi(pedi_r3),
+        .peri(peri_r3),
+        .peso(peso_r3),
+        .pero(pero_r3),
+        .pedo(pedo_r3)
+    );
+endmodule
