@@ -127,7 +127,7 @@ module tb_mesh4x4;
         pesi_30 = 0; pesi_31 = 0; pesi_32 = 0; pesi_33 = 0;
 
 
-        #400;
+        #270;
         $finish;
     end
 
