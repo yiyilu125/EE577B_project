@@ -519,8 +519,8 @@ module mesh4x4 #(
 
         // South to North interface (no connection below)
         .snsi(sns_r3_r7),
-        .sndi(sns_r3_r7),
-        .snri(sns_r3_r7),
+        .sndi(snd_r3_r7),
+        .snri(snr_r3_r7),
         .snso(sns_r7_r11),
         .snro(snr_r7_r11),
         .sndo(snd_r7_r11),
@@ -720,8 +720,8 @@ module mesh4x4 #(
 
         // South to North interface (no connection below)
         .snsi(sns_r7_r11),
-        .sndi(sns_r7_r11),
-        .snri(sns_r7_r11),
+        .sndi(snd_r7_r11),
+        .snri(snr_r7_r11),
         .snso(sns_r11_r15),
         .snro(snr_r11_r15),
         .sndo(snd_r11_r15),
@@ -921,8 +921,8 @@ module mesh4x4 #(
 
         // South to North interface (no connection below)
         .snsi(sns_r11_r15),
-        .sndi(sns_r11_r15),
-        .snri(sns_r11_r15),
+        .sndi(snd_r11_r15),
+        .snri(snr_r11_r15),
         .snso(),
         .snro(),
         .sndo(),
