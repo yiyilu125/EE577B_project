@@ -19,7 +19,6 @@ endmodule
 
 
 
-
 module opctrl (
     input clk,
     input reset,                        
@@ -98,15 +97,9 @@ always @(posedge clk) begin
                 endcase
                 empty_even <= 0; // Set empty to low after receiving data
             end
-
-            // Output logic for even memory
-            if (receive_output && ~empty_odd) begin
-                data_out <= mem_odd;
-                send_output <= 1;
-                mem_odd <= 0;
+            
+            if (send_output) begin
                 empty_odd <= 1;
-            end else begin
-                send_output <= 0; // Blocked, so no output
             end
         end else begin
             // Odd clock cycle logic
@@ -125,30 +118,33 @@ always @(posedge clk) begin
                 empty_odd <= 0; // Set empty to low after receiving data
             end
 
-            // Output logic for odd memory
-            if (receive_output && ~empty_even) begin
-                data_out <= mem_even;
-                send_output <= 1;
-                mem_even <= 0;
+            if (send_output) begin
                 empty_even <= 1;
-            end else begin
-                send_output <= 0; // Blocked, so no output
             end
         end
     end
 end
 
-
-// Update clear and empty signals based on the current polarity and empty status
 always @(*) begin
-    if (polarity == 0) begin
-        empty = empty_even;       // When polarity is 0, reflect the status of empty_even
-        clear = empty_even ? grant : 0; // Set clear to grant if even memory is empty
-    end else begin
-        empty = empty_odd;        // When polarity is 1, reflect the status of empty_odd
-        clear = empty_odd ? grant : 0;  // Set clear to grant if odd memory is empty
+    data_out = 0;
+    send_output = 0;
+
+    // Determine output data and status based on polarity and empty signals
+    if (receive_output) begin
+        if (polarity == 0 && ~empty_odd) begin
+            data_out = mem_odd;
+            send_output = 1;
+        end else if (polarity == 1 && ~empty_even) begin
+            data_out = mem_even;
+            send_output = 1;
+        end
     end
 end
 
+// Update clear and empty signals based on the current polarity and empty status
+always @(*) begin
+    empty = (polarity == 0) ? empty_even : empty_odd; 
+    clear = empty ? grant : 0;
+end
 
 endmodule
