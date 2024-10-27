@@ -110,7 +110,7 @@ module tb_mesh4x4;
             des = des_y * 4 + des_x;
 
             // Log the packet information in the specified format
-            $fwrite(file, "Phase = %0d, Time = %0d, Destination = R%0d(%0d,%0d), Source = R%0d(%0d,%0d), HopValue = %0h, PacketValue = %016h\n", 
+            $fwrite(file, "Phase = %0d, Time = %0d, Destination = R%0d(%0d,%0d), Source = R%0d(%0d,%0d), HopValue = %02h, PacketValue = %016h\n", 
                     phase, $time, des, des_x, des_y, phase, source[15:8], source[7:0], hop, 64'(packet));
         end
     endtask
@@ -120,20 +120,20 @@ module tb_mesh4x4;
     always @(posedge clk) begin
         if (!reset) begin
             if (peso_00) printlog(0,  logfile[0],  pedo_00);
-            if (peso_01) printlog(1,  logfile[1],  pedo_01);
-            if (peso_02) printlog(2,  logfile[2],  pedo_02);
-            if (peso_03) printlog(3,  logfile[3],  pedo_03);
-            if (peso_10) printlog(4,  logfile[4],  pedo_10);
+            if (peso_10) printlog(1,  logfile[1],  pedo_10);
+            if (peso_20) printlog(2,  logfile[2],  pedo_20);
+            if (peso_30) printlog(3,  logfile[3],  pedo_30);
+            if (peso_01) printlog(4,  logfile[4],  pedo_01);
             if (peso_11) printlog(5,  logfile[5],  pedo_11);
-            if (peso_12) printlog(6,  logfile[6],  pedo_12);
-            if (peso_13) printlog(7,  logfile[7],  pedo_13);
-            if (peso_20) printlog(8,  logfile[8],  pedo_20);
-            if (peso_21) printlog(9,  logfile[9],  pedo_21);
+            if (peso_21) printlog(6,  logfile[6],  pedo_21);
+            if (peso_31) printlog(7,  logfile[7],  pedo_31);
+            if (peso_02) printlog(8,  logfile[8],  pedo_02);
+            if (peso_12) printlog(9,  logfile[9],  pedo_12);
             if (peso_22) printlog(10, logfile[10], pedo_22);
-            if (peso_23) printlog(11, logfile[11], pedo_23);
-            if (peso_30) printlog(12, logfile[12], pedo_30);
-            if (peso_31) printlog(13, logfile[13], pedo_31);
-            if (peso_32) printlog(14, logfile[14], pedo_32);
+            if (peso_32) printlog(11, logfile[11], pedo_32);
+            if (peso_03) printlog(12, logfile[12], pedo_03);
+            if (peso_13) printlog(13, logfile[13], pedo_13);
+            if (peso_23) printlog(14, logfile[14], pedo_23);
             if (peso_33) printlog(15, logfile[15], pedo_33);
         end
     end
@@ -147,35 +147,72 @@ module tb_mesh4x4;
         pesi_10 = 0; pesi_11 = 0; pesi_12 = 0; pesi_13 = 0;
         pesi_20 = 0; pesi_21 = 0; pesi_22 = 0; pesi_23 = 0;
         pesi_30 = 0; pesi_31 = 0; pesi_32 = 0; pesi_33 = 0;
-        phase = 10;
+
+        pero_00 = 1; pero_01 = 1; pero_02 = 1; pero_03 = 1;
+        pero_10 = 1; pero_11 = 1; pero_12 = 1; pero_13 = 1;
+        pero_20 = 1; pero_21 = 1; pero_22 = 1; pero_23 = 1;
+        pero_30 = 1; pero_31 = 1; pero_32 = 1; pero_33 = 1;
+        // phase = 10;
 
         // phase 10 example 
-        #10 reset = 0; pero_22 = 1;
+        #10 reset = 0; 
         #10
-        pesi_00 = 1; pedi_00 = {1'b0, 2'b11, 5'b00000, 8'h22, 16'h0000, 32'h0000_0000};    // R(0,0)
-        pesi_01 = 1; pedi_01 = {1'b1, 2'b11, 5'b00000, 8'h21, 16'h0001, 32'h1111_1111};    // R(0,1)
-        pesi_02 = 1; pedi_02 = {1'b0, 2'b10, 5'b00000, 8'h20, 16'h0002, 32'h2222_2222};    // R(0,2)
-        pesi_03 = 1; pedi_03 = {1'b1, 2'b10, 5'b00000, 8'h21, 16'h0003, 32'h3333_3333};    // R(0,3)
-        pesi_10 = 1; pedi_10 = {1'b0, 2'b11, 5'b00000, 8'h12, 16'h0100, 32'h4444_4444};    // R(1,0)
-        pesi_11 = 1; pedi_11 = {1'b1, 2'b11, 5'b00000, 8'h11, 16'h0101, 32'h5555_5555};    // R(1,1)
-        pesi_12 = 1; pedi_12 = {1'b0, 2'b10, 5'b00000, 8'h10, 16'h0102, 32'h6666_6666};    // R(1,2)
-        pesi_13 = 1; pedi_13 = {1'b1, 2'b10, 5'b00000, 8'h11, 16'h0103, 32'h7777_7777};    // R(1,3)
-        pesi_20 = 1; pedi_20 = {1'b0, 2'b01, 5'b00000, 8'h02, 16'h0200, 32'h8888_8888};    // R(2,0)
-        pesi_21 = 1; pedi_21 = {1'b1, 2'b01, 5'b00000, 8'h01, 16'h0201, 32'h9999_9999};    // R(2,1)
-        // this line is R(2,2) itself
-        pesi_23 = 1; pedi_23 = {1'b0, 2'b00, 5'b00000, 8'h01, 16'h0203, 32'hBBBB_BBBB};    // R(2,3)
-        pesi_30 = 1; pedi_30 = {1'b1, 2'b01, 5'b00000, 8'h12, 16'h0300, 32'hCCCC_CCCC};    // R(3,0)
-        pesi_31 = 1; pedi_31 = {1'b0, 2'b01, 5'b00000, 8'h11, 16'h0301, 32'hDDDD_DDDD};    // R(3,1)
-        pesi_32 = 1; pedi_32 = {1'b1, 2'b00, 5'b00000, 8'h10, 16'h0302, 32'hEEEE_EEEE};    // R(3,2)
-        pesi_33 = 1; pedi_33 = {1'b0, 2'b00, 5'b00000, 8'h11, 16'h0303, 32'hFFFF_FFFF};    // R(3,3)
+        // pesi_00 = 1; pedi_00 = {1'b0, 2'b11, 5'b00000, 8'h22, 16'h0000, 32'h0000_0000};    // R(0,0)
+        // pesi_01 = 1; pedi_01 = {1'b0, 2'b11, 5'b00000, 8'h21, 16'h0001, 32'h1111_1111};    // R(0,1)
+        // pesi_02 = 1; pedi_02 = {1'b0, 2'b10, 5'b00000, 8'h20, 16'h0002, 32'h2222_2222};    // R(0,2)
+        pesi_03 = 1; pedi_03 = {1'b0, 2'b10, 5'b00000, 8'h23, 16'h0003, 32'h3333_3333};    // R(0,3)
+        // pesi_10 = 1; pedi_10 = {1'b0, 2'b11, 5'b00000, 8'h12, 16'h0100, 32'h4444_4444};    // R(1,0)
+        // pesi_11 = 1; pedi_11 = {1'b0, 2'b11, 5'b00000, 8'h11, 16'h0101, 32'h5555_5555};    // R(1,1)
+        // pesi_12 = 1; pedi_12 = {1'b0, 2'b10, 5'b00000, 8'h10, 16'h0102, 32'h6666_6666};    // R(1,2)
+        // pesi_13 = 1; pedi_13 = {1'b0, 2'b10, 5'b00000, 8'h11, 16'h0103, 32'h7777_7777};    // R(1,3)
+        // pesi_20 = 1; pedi_20 = {1'b0, 2'b01, 5'b00000, 8'h02, 16'h0200, 32'h8888_8888};    // R(2,0)
+        // pesi_21 = 1; pedi_21 = {1'b0, 2'b01, 5'b00000, 8'h01, 16'h0201, 32'h9999_9999};    // R(2,1)
+        // pesi_22 = 1; pedi_22 = {1'b0, 2'b00, 5'b00000, 8'h02, 16'h0202, 32'hAAAA_AAAA};    // R(2,2)
+        // pesi_23 = 1; pedi_23 = {1'b0, 2'b00, 5'b00000, 8'h01, 16'h0203, 32'hBBBB_BBBB};    // R(2,3)
+        // pesi_30 = 1; pedi_30 = {1'b0, 2'b01, 5'b00000, 8'h12, 16'h0300, 32'hCCCC_CCCC};    // R(3,0)
+        // pesi_31 = 1; pedi_31 = {1'b0, 2'b01, 5'b00000, 8'h11, 16'h0301, 32'hDDDD_DDDD};    // R(3,1)
+        // pesi_32 = 1; pedi_32 = {1'b0, 2'b00, 5'b00000, 8'h10, 16'h0302, 32'hEEEE_EEEE};    // R(3,2)
+        // pesi_33 = 1; pedi_33 = {1'b0, 2'b00, 5'b00000, 8'h11, 16'h0303, 32'hFFFF_FFFF};    // R(3,3)
 
         #10
         pesi_00 = 0; pesi_01 = 0; pesi_02 = 0; pesi_03 = 0;
         pesi_10 = 0; pesi_11 = 0; pesi_12 = 0; pesi_13 = 0;
-        pesi_20 = 0; pesi_21 = 0; pesi_23 = 0; 
+        pesi_20 = 0; pesi_21 = 0; pesi_22 = 0; pesi_23 = 0;
         pesi_30 = 0; pesi_31 = 0; pesi_32 = 0; pesi_33 = 0;
 
-        #270 
+        #500 
+
+
+
+        // phase 2
+        #10 reset = 0; 
+        #10
+        pesi_00 = 1; pedi_00 = {1'b0, 2'b10, 5'b00000, 8'h20, 16'h0000, 32'h0000_0000};    // R(0,0)
+        pesi_01 = 1; pedi_01 = {1'b0, 2'b10, 5'b00000, 8'h21, 16'h0001, 32'h1111_1111};    // R(0,1)
+        pesi_02 = 1; pedi_02 = {1'b0, 2'b10, 5'b00000, 8'h22, 16'h0002, 32'h2222_2222};    // R(0,2)
+        pesi_03 = 1; pedi_03 = {1'b0, 2'b10, 5'b00000, 8'h23, 16'h0003, 32'h3333_3333};    // R(0,3)
+        pesi_10 = 1; pedi_10 = {1'b0, 2'b10, 5'b00000, 8'h10, 16'h0100, 32'h4444_4444};    // R(1,0)
+        pesi_11 = 1; pedi_11 = {1'b0, 2'b10, 5'b00000, 8'h11, 16'h0101, 32'h5555_5555};    // R(1,1)
+        pesi_12 = 1; pedi_12 = {1'b0, 2'b10, 5'b00000, 8'h12, 16'h0102, 32'h6666_6666};    // R(1,2)
+        pesi_13 = 1; pedi_13 = {1'b0, 2'b10, 5'b00000, 8'h13, 16'h0103, 32'h7777_7777};    // R(1,3)
+        // pesi_20 = 1; pedi_20 = {1'b0, 2'b01, 5'b00000, 8'h02, 16'h0200, 32'h8888_8888};    // R(2,0)
+        pesi_21 = 1; pedi_21 = {1'b0, 2'b00, 5'b00000, 8'h01, 16'h0201, 32'h9999_9999};    // R(2,1)
+        pesi_22 = 1; pedi_22 = {1'b0, 2'b00, 5'b00000, 8'h02, 16'h0202, 32'hAAAA_AAAA};    // R(2,2)
+        pesi_23 = 1; pedi_23 = {1'b0, 2'b00, 5'b00000, 8'h03, 16'h0203, 32'hBBBB_BBBB};    // R(2,3)
+        pesi_30 = 1; pedi_30 = {1'b0, 2'b00, 5'b00000, 8'h10, 16'h0300, 32'hCCCC_CCCC};    // R(3,0)
+        pesi_31 = 1; pedi_31 = {1'b0, 2'b00, 5'b00000, 8'h11, 16'h0301, 32'hDDDD_DDDD};    // R(3,1)
+        pesi_32 = 1; pedi_32 = {1'b0, 2'b00, 5'b00000, 8'h12, 16'h0302, 32'hEEEE_EEEE};    // R(3,2)
+        pesi_33 = 1; pedi_33 = {1'b0, 2'b00, 5'b00000, 8'h13, 16'h0303, 32'hFFFF_FFFF};    // R(3,3)
+
+        #10
+        pesi_00 = 0; pesi_01 = 0; pesi_02 = 0; pesi_03 = 0;
+        pesi_10 = 0; pesi_11 = 0; pesi_12 = 0; pesi_13 = 0;
+        pesi_20 = 0; pesi_21 = 0; pesi_22 = 0; pesi_23 = 0;
+        pesi_30 = 0; pesi_31 = 0; pesi_32 = 0; pesi_33 = 0;
+
+        #500
+        
+
         
 
 
@@ -190,55 +227,73 @@ module tb_mesh4x4;
         // 
         // ***************************
 
-        for (phase = 0; phase < 16; phase = phase + 1) begin
-            // Reset all pesi and pedi initially
-            for (i = 0; i < 16; i = i + 1) begin
-                pesi[i] = 1'b0; // Set pesi to 0 (no send) by default
-                pedi[i] = 64'b0; // Clear pedi values
-                pero[i] = 1'b0;
-            end
+        // for (phase = 0; phase < 16; phase = phase + 1) begin
+        //     // Reset all pesi and pedi initially
+        //     for (i = 0; i < 16; i = i + 1) begin
+        //         pesi[i] = 1'b0; // Set pesi to 0 (no send) by default
+        //         pedi[i] = 64'b0; // Clear pedi values
+        //         pero[i] = 1'b0;
+        //     end
 
-            pero[phase] = 1;
+        //     pero[phase] = 1;
 
-            // Set up sending nodes for current phase
-            for (i = 0; i < 16; i = i + 1) begin
-                if (i != phase) begin
-                    pesi[i] = 1'b1; // Set pesi to 1 for nodes sending data
+        //     // Set up sending nodes for current phase
+        //     for (i = 0; i < 16; i = i + 1) begin
+        //         if (i != phase) begin
+        //             pesi[i] = 1'b1; // Set pesi to 1 for nodes sending data
                     
-                    src_x = i % 4;
-                    src_y = i / 4;
-                    des_x = phase % 4;
-                    des_y = phase / 4;
-                    hop_x = (des_x > src_x) ? (des_x - src_x) : (src_x - des_x);
-                    dir[1] = (des_x > src_x) ? 1 : 0;
-                    hop_y = (des_y > src_y) ? (des_y - src_y) : (src_y - des_y);
-                    dir[0] = (des_y > src_y) ? 1 : 0;
+        //             src_x = i % 4;
+        //             src_y = i / 4;
+        //             des_x = phase % 4;
+        //             des_y = phase / 4;
+        //             hop_x = (des_x > src_x) ? (des_x - src_x) : (src_x - des_x);
+        //             dir[1] = (des_x > src_x) ? 1 : 0;
+        //             hop_y = (des_y > src_y) ? (des_y - src_y) : (src_y - des_y);
+        //             dir[0] = (des_y > src_y) ? 1 : 0;
 
-                    pedi[i] = {1'b0, dir, 5'b00000, hop_x, hop_y, src_x, src_y, 32'h1111_1111 * i};
-                end
-            end
+        //             pedi[i] = {1'b0, dir, 5'b00000, hop_x, hop_y, src_x, src_y, 32'h1111_1111 * i};
+        //         end
+        //     end
 
-            // Now apply pesi and pedi values to corresponding signals in your mesh.
-            pero_00 = pero[0];  pesi_00 = pesi[0];  pedi_00 = pedi[0];
-            pero_10 = pero[1];  pesi_10 = pesi[1];  pedi_10 = pedi[1];
-            pero_20 = pero[2];  pesi_20 = pesi[2];  pedi_20 = pedi[2];
-            pero_30 = pero[3];  pesi_30 = pesi[3];  pedi_30 = pedi[3];
-            pero_01 = pero[4];  pesi_01 = pesi[4];  pedi_01 = pedi[4];
-            pero_11 = pero[5];  pesi_11 = pesi[5];  pedi_11 = pedi[5];
-            pero_21 = pero[6];  pesi_21 = pesi[6];  pedi_21 = pedi[6];
-            pero_31 = pero[7];  pesi_31 = pesi[7];  pedi_31 = pedi[7];
-            pero_02 = pero[8];  pesi_02 = pesi[8];  pedi_02 = pedi[8];
-            pero_12 = pero[9];  pesi_12 = pesi[9];  pedi_12 = pedi[9];
-            pero_22 = pero[10]; pesi_22 = pesi[10]; pedi_22 = pedi[10];
-            pero_32 = pero[11]; pesi_32 = pesi[11]; pedi_32 = pedi[11];
-            pero_03 = pero[12]; pesi_03 = pesi[12]; pedi_03 = pedi[12];
-            pero_13 = pero[13]; pesi_13 = pesi[13]; pedi_13 = pedi[13];
-            pero_23 = pero[14]; pesi_23 = pesi[14]; pedi_23 = pedi[14];
-            pero_33 = pero[15]; pesi_33 = pesi[15]; pedi_33 = pedi[15];
+        //     // Now apply pesi and pedi values to corresponding signals in your mesh.
+        //     pero_00 = pero[0];  pesi_00 = pesi[0];  pedi_00 = pedi[0];
+        //     pero_10 = pero[1];  pesi_10 = pesi[1];  pedi_10 = pedi[1];
+        //     pero_20 = pero[2];  pesi_20 = pesi[2];  pedi_20 = pedi[2];
+        //     pero_30 = pero[3];  pesi_30 = pesi[3];  pedi_30 = pedi[3];
+        //     pero_01 = pero[4];  pesi_01 = pesi[4];  pedi_01 = pedi[4];
+        //     pero_11 = pero[5];  pesi_11 = pesi[5];  pedi_11 = pedi[5];
+        //     pero_21 = pero[6];  pesi_21 = pesi[6];  pedi_21 = pedi[6];
+        //     pero_31 = pero[7];  pesi_31 = pesi[7];  pedi_31 = pedi[7];
+        //     pero_02 = pero[8];  pesi_02 = pesi[8];  pedi_02 = pedi[8];
+        //     pero_12 = pero[9];  pesi_12 = pesi[9];  pedi_12 = pedi[9];
+        //     pero_22 = pero[10]; pesi_22 = pesi[10]; pedi_22 = pedi[10];
+        //     pero_32 = pero[11]; pesi_32 = pesi[11]; pedi_32 = pedi[11];
+        //     pero_03 = pero[12]; pesi_03 = pesi[12]; pedi_03 = pedi[12];
+        //     pero_13 = pero[13]; pesi_13 = pesi[13]; pedi_13 = pedi[13];
+        //     pero_23 = pero[14]; pesi_23 = pesi[14]; pedi_23 = pedi[14];
+        //     pero_33 = pero[15]; pesi_33 = pesi[15]; pedi_33 = pedi[15];
 
-            // Wait for a few clock cycles before moving to the next phase
-            #300;
-        end
+        //     #10
+        //     pesi_00 = 0;
+        //     pesi_10 = 0;
+        //     pesi_20 = 0;
+        //     pesi_30 = 0;
+        //     pesi_01 = 0;
+        //     pesi_11 = 0;
+        //     pesi_21 = 0;
+        //     pesi_31 = 0;
+        //     pesi_02 = 0;
+        //     pesi_12 = 0;
+        //     pesi_22 = 0;
+        //     pesi_32 = 0;
+        //     pesi_03 = 0;
+        //     pesi_13 = 0;
+        //     pesi_23 = 0;
+        //     pesi_33 = 0;
+
+        //     // Wait for a few clock cycles before moving to the next phase
+        //     #400;
+        // end
 
 
         for (i = 0; i < 16; i = i + 1) begin
