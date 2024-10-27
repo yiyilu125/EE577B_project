@@ -67,7 +67,8 @@ module nic(
 		   
 		   if (nicEn && !nicWrEN && addr == 2'b00 && !input_status ) // PE read input data
 			begin
-				$display("ERROR! you are tying to read empty input buffer");
+				//$display("ERROR! you are tying to read empty input buffer");  //debug only not for syn
+				d_out=0;
             end
 		   
 		   
@@ -80,19 +81,13 @@ module nic(
 			
 			if (nicEn && nicWrEN && addr == 2'b10 && output_status)   //PE put processed result to output buffer
 			begin
-                $display("ERROR! you are tring to write full output buffer");
+               // $display("ERROR! you are tring to write full output buffer");  //debug only not for syn
             end
 			
 			 if (output_status    &&    net_ro   &&   net_polarity==output_channel_buffer[63])  // NIC send packet back to router
 			begin
-                net_do <= output_channel_buffer;  
-                net_so <= 1'b1;                  
                 output_status <= 1'b0;            
             end 
-			else 
-			begin
-                net_so <= 1'b0;                
-            end	
 			
 			
 			
@@ -113,6 +108,24 @@ module nic(
 
          
         end
+		
     end
+	
+	
+	
+	
+	always@(*)
+	begin
+	 if (output_status    &&    net_ro   &&   net_polarity==output_channel_buffer[63])  // NIC send packet back to router
+		begin
+            net_do = output_channel_buffer;  
+            net_so = 1'b1;                       
+        end 
+	if(!net_ro)
+		begin
+			net_do=0;
+			net_so=0;
+		end
+	end
 
 endmodule
