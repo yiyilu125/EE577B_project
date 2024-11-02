@@ -179,12 +179,10 @@ module tb_hotpot;
 
         #10 reset = 0;
 
-        #10
+        #50
         pesi_02 = 1; 
 
-        // pesi_03 = 1; pedi_03 = packet_gen(12,10) + ($time / 10);
-
-        repeat (7) begin
+        repeat (5) begin
             pedi_02 = packet_gen(8,9)  + ($time / 10);   
             #10;
         end
@@ -194,7 +192,7 @@ module tb_hotpot;
         #10 pesi_02 = 0;
 
 
-        #1000
+        #300
 
         for (i = 0; i < 16; i = i + 1) begin
             $fclose(logfile[i]);
@@ -206,13 +204,23 @@ module tb_hotpot;
 always @(negedge clk) begin 
     if (!reset) begin 
         if($time / 10 < 50) begin
-        pesi_13 = 1; pedi_13 = packet_gen(13,9) + ($time / 10);
-        pesi_22 = 1; pedi_22 = packet_gen(10,9) + ($time / 10);
-        pesi_11 = 1; pedi_11 = packet_gen(5,9)  + ($time / 10);
+            // busy node 9(1,2)
+            pesi_13 = 1; pedi_13 = packet_gen(13,9) + ($time / 10);
+            pesi_22 = 1; pedi_22 = packet_gen(10,9) + ($time / 10);
+            pesi_11 = 1; pedi_11 = packet_gen(5, 9) + ($time / 10);
+
+            // // busy node 10(2,2)
+            // pesi_23 = 1; pedi_23 = packet_gen(14,10) + ($time / 10);
+            // pesi_32 = 1; pedi_32 = packet_gen(11,10) + ($time / 10);
+            // pesi_21 = 1; pedi_21 = packet_gen(6, 10) + ($time / 10);
+
         end else begin 
-        pesi_13 = 0; pedi_13 = 0;
-        pesi_22 = 0; pedi_22 = 0;
-        pesi_11 = 0; pedi_11 = 0;
+            pesi_13 = 0; pedi_13 = 0;
+            pesi_22 = 0; pedi_22 = 0;
+            pesi_11 = 0; pedi_11 = 0;
+            // pesi_23 = 0; pedi_23 = 0;
+            // pesi_32 = 0; pedi_32 = 0;
+            // pesi_21 = 0; pedi_21 = 0;
         end
     end
 end
