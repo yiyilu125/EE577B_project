@@ -65,21 +65,25 @@ module input_interface #(
     assign dataoU = (opt_reqU_wire == 1) ? opt_reqU_data : reqU_middle_data;
     always@(*)begin
         opt_reqU_wire = 0;
-        opt_reqU_data = {DATA_WIDTH{1'b0}};
+        opt_reqU_data = 64'b0;
         if (DIRECTION==5'b00001 || DIRECTION==5'b00010) begin
             if(buf_clear_1 == 0 && reqR_middle_wire == 1) begin
                 opt_reqU_wire = 1;
                 if(DIRECTION == 5'b00001)begin
-                    if(routing_algo_uut.dataOutL[61] == 1)begin
-                        opt_reqU_data = {routing_algo_uut.dataOutR[63:56], {routing_algo_uut.dataOutR[55:48] - 1}, routing_algo_uut.dataOutR[47:0]};
+                    if(routing_algo_uut.dataOutR[61] == 1)begin
+                        // opt_reqU_data = {{routing_algo_uut.dataOutR[63:56]}, {routing_algo_uut.dataOutR[55:48] - 1}, {routing_algo_uut.dataOutR[47:0]}};
+                        opt_reqU_data = routing_algo_uut.dataOutR - 64'h0001_0000_0000_0000;
                     end else begin 
-                        opt_reqU_data = {routing_algo_uut.dataOutR[63:56], {routing_algo_uut.dataOutR[55:48] + 1}, routing_algo_uut.dataOutR[47:0]};
+                        // opt_reqU_data = {{routing_algo_uut.dataOutR[63:56]}, {routing_algo_uut.dataOutR[55:48] + 1}, {routing_algo_uut.dataOutR[47:0]}};
+                        opt_reqU_data = routing_algo_uut.dataOutR + 64'h0001_0000_0000_0000;
                     end
                 end else begin
-                    if(routing_algo_uut.dataOutL[61] == 1)begin
-                        opt_reqU_data = {routing_algo_uut.dataOutR[63:56], {routing_algo_uut.dataOutR[55:48] - 1}, routing_algo_uut.dataOutR[47:0]};
+                    if(routing_algo_uut.dataOutR[61] == 1)begin
+                        // opt_reqU_data = {{routing_algo_uut.dataOutR[63:56]}, {routing_algo_uut.dataOutR[55:48] - 1}, {routing_algo_uut.dataOutR[47:0]}};
+                        opt_reqU_data = routing_algo_uut.dataOutR - 64'h0001_0000_0000_0000;
                     end else begin 
-                        opt_reqU_data = {routing_algo_uut.dataOutR[63:56], {routing_algo_uut.dataOutR[55:48] + 1}, routing_algo_uut.dataOutR[47:0]};
+                        // opt_reqU_data = {{routing_algo_uut.dataOutR[63:56]}, {routing_algo_uut.dataOutR[55:48] + 1}, {routing_algo_uut.dataOutR[47:0]}};
+                        opt_reqU_data = routing_algo_uut.dataOutR + 64'h0001_0000_0000_0000;
                     end
                 end
                 //opt_reqU_data = (DIRECTION == 5'b00001) ? routing_algo_uut.dataOutL : routing_algo_uut.dataOutPE;
